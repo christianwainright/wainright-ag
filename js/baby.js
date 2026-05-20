@@ -1,3 +1,6 @@
+// CONFIGURATION: Add your Google Apps Script Web App URL here to enable email notifications
+const GOOGLE_APPS_SCRIPT_URL = ''; // e.g., 'https://script.google.com/macros/s/.../exec'
+
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
   initRSVPWizard();
@@ -103,14 +106,14 @@ function initRSVPWizard() {
   });
 
   // Submit RSVP Handler
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     if (!validateStep(3)) return;
 
     // Build data object
     const rsvpData = {
-      attending: attendingChoice === 'yes',
+      attending: attendingChoice === 'yes' ? 'yes' : 'no',
       name: document.getElementById('rsvp-name').value.trim(),
       guests: attendingChoice === 'yes' ? parseInt(document.getElementById('rsvp-count').value, 10) : 0,
       diet: attendingChoice === 'yes' ? document.getElementById('rsvp-diet').value.trim() : '',
@@ -124,13 +127,39 @@ function initRSVPWizard() {
     rsvps.push(rsvpData);
     localStorage.setItem('wainright_rsvps', JSON.stringify(rsvps));
 
+    // Show loading state
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending RSVP... ✉️';
+
+    // Submit to Google Apps Script Web App if URL is configured
+    if (typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' && GOOGLE_APPS_SCRIPT_URL) {
+      try {
+        await fetch(GOOGLE_APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors', // Avoids CORS preflight blockages on redirects
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(rsvpData)
+        });
+      } catch (err) {
+        console.error('Error sending RSVP email:', err);
+      }
+    }
+
+    // Restore button state (in case user updates later)
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
+
     // Show Success Screen
     form.style.display = 'none';
     progressBar.style.display = 'none';
     successScreen.style.display = 'flex';
 
     const successMsg = document.getElementById('success-msg');
-    if (rsvpData.attending) {
+    if (rsvpData.attending === 'yes') {
       successMsg.textContent = `Yay! We've registered your RSVP, ${rsvpData.name}. We can't wait to see you on August 9th!`;
     } else {
       successMsg.textContent = `Thank you for letting us know, ${rsvpData.name}. We'll miss you, but appreciate your warm thoughts!`;
