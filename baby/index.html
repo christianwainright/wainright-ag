@@ -7,10 +7,32 @@
   <meta name="description" content="Please join us for A Tiny Human Gathering! A baby shower with a cooler name, so the whole family can gather round the table! Celebrating Christian & Kelly on Sunday, August 9, 2026.">
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/baby.css">
+  <script>
+    // Immediate auth check to prevent unauthenticated layout flash
+    if (sessionStorage.getItem('baby_shower_auth') === 'true') {
+      document.documentElement.setAttribute('data-auth', 'true');
+    }
+  </script>
   <script defer src="../js/main.js"></script>
   <script defer src="../js/baby.js"></script>
 </head>
-<body>
+<body class="locked">
+  
+  <!-- Password protection overlay -->
+  <div id="password-overlay">
+    <div class="auth-card">
+      <div class="auth-icon">🔒</div>
+      <h2>Tiny Human Gathering</h2>
+      <p>Please enter the password from your invitation to access the event details.</p>
+      <form id="auth-form" onsubmit="verifyPassword(event)">
+        <div class="form-group" style="margin-block-end: 0;">
+          <input type="password" id="entry-password" placeholder="Enter password" required autofocus autocomplete="current-password" style="text-align: center; font-size: 1.1rem; letter-spacing: 0.1em;">
+          <span class="auth-error-msg" id="auth-error">Incorrect password. Please try again.</span>
+        </div>
+        <button type="submit" class="btn btn-primary" style="inline-size: 100%; margin-block-start: var(--space-md);">Unlock Details 🔑</button>
+      </form>
+    </div>
+  </div>
 
   <!-- Header / Navigation -->
   <header>
@@ -396,5 +418,43 @@
     </div>
   </footer>
 
+  <!-- Password verification logic -->
+  <script>
+    async function hashSHA256(str) {
+      const buf = new TextEncoder().encode(str);
+      const hash = await crypto.subtle.digest('SHA-256', buf);
+      return Array.from(new Uint8Array(hash))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    const CORRECT_HASH = '83754d7ea03ac913d2ff32b7651070c8f1d3429401c65ceeb77c94d6050f22f6'; // 'tinyhuman'
+
+    async function verifyPassword(event) {
+      event.preventDefault();
+      const passwordInput = document.getElementById('entry-password');
+      const errorMsg = document.getElementById('auth-error');
+      const password = passwordInput.value.trim().toLowerCase();
+      
+      const hash = await hashSHA256(password);
+      if (hash === CORRECT_HASH) {
+        sessionStorage.setItem('baby_shower_auth', 'true');
+        document.documentElement.setAttribute('data-auth', 'true');
+        document.body.classList.remove('locked');
+      } else {
+        errorMsg.style.display = 'block';
+        passwordInput.style.borderColor = 'hsl(0 70% 50%)';
+        passwordInput.value = '';
+        passwordInput.focus();
+      }
+    }
+
+    // Final fallback check on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('baby_shower_auth') === 'true') {
+        document.body.classList.remove('locked');
+      }
+    });
+  </script>
 </body>
 </html>

@@ -724,3 +724,87 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   7. Password Protection Overlay
+   ========================================================================== */
+body.locked > main,
+body.locked > header,
+body.locked > footer {
+  display: none !important;
+}
+
+html[data-auth="true"] body.locked > main,
+html[data-auth="true"] body.locked > header,
+html[data-auth="true"] body.locked > footer {
+  display: block !important;
+}
+
+#password-overlay {
+  display: none;
+}
+
+body.locked #password-overlay {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  background-color: var(--color-bg-base);
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding: var(--space-md);
+}
+
+html[data-auth="true"] body.locked #password-overlay {
+  display: none !important;
+}
+
+.auth-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  padding: var(--space-xl);
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-premium), 0 0 40px var(--color-gold-bg);
+  animation: authCardFadeIn 0.6s var(--ease-premium);
+}
+
+@keyframes authCardFadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-icon {
+  font-size: 3rem;
+  line-height: 1;
+  margin-block-end: var(--space-sm);
+  animation: authLockPulse 2s infinite ease-in-out;
+}
+
+@keyframes authLockPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.auth-card h2 {
+  font-size: 1.8rem;
+  margin-block-end: var(--space-xs);
+  color: var(--color-accent);
+}
+
+.auth-card p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-block-end: var(--space-xl);
+  line-height: 1.45;
+}
+
+.auth-error-msg {
+  display: none;
+  color: hsl(0 70% 50%);
+  font-size: 0.82rem;
+  margin-block-start: var(--space-xs);
+  text-align: left;
+}
