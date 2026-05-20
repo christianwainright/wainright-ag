@@ -1,0 +1,726 @@
+/* ==========================================================================
+   1. Whimsical Pastel Theme overrides
+   ========================================================================== */
+:root {
+  /* Redefining tokens to match the board-game/postcard invite aesthetic */
+  --color-accent: light-dark(hsl(92 18% 35%), hsl(92 20% 70%)); /* Sage/forest green */
+  --color-accent-subtle: light-dark(hsl(92 18% 92%), hsl(92 15% 18%));
+  
+  --color-bg-base: light-dark(hsl(36 33% 94%), hsl(28 15% 10%)); /* Warm cream paper */
+  --color-bg-surface: light-dark(hsl(36 28% 98%), hsl(28 12% 14%));
+  --color-bg-surface-subtle: light-dark(hsl(36 25% 90%), hsl(28 15% 12%));
+  
+  --color-border: light-dark(hsl(28 15% 82%), hsl(28 10% 22%)); /* Warm woody grey borders */
+  --color-border-hover: light-dark(hsl(28 20% 70%), hsl(28 10% 32%));
+  
+  --color-primary: light-dark(hsl(28 25% 15%), hsl(28 10% 88%)); /* Deep woody brown/charcoal */
+  --color-text-main: light-dark(hsl(28 25% 15%), hsl(28 10% 88%));
+  --color-text-muted: light-dark(hsl(28 15% 42%), hsl(28 10% 68%));
+  
+  --color-gold: light-dark(hsl(42 60% 40%), hsl(42 60% 72%));
+  --color-gold-bg: light-dark(hsl(42 50% 92%), hsl(42 40% 16%));
+}
+
+/* ==========================================================================
+   2. Baby Hero Section
+   ========================================================================== */
+.baby-hero-container {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: var(--space-2xl);
+}
+
+.baby-badge {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: light-dark(hsl(120 40% 90%), hsl(120 30% 18%));
+  color: var(--color-accent);
+  padding: var(--space-2xs) var(--space-md);
+  border-radius: 9999px;
+  border: 1px solid var(--color-border);
+}
+
+.baby-hero-content h1 {
+  font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+  margin-block-end: var(--space-sm);
+  color: var(--color-accent);
+}
+
+.baby-hero-content p {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  max-width: 550px;
+  margin-block-end: var(--space-lg);
+}
+
+.baby-hero-cta {
+  display: flex;
+  gap: var(--space-md);
+  margin-block-start: var(--space-lg);
+}
+
+/* Event Details Card */
+.event-details-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+  max-width: 550px;
+}
+
+.event-detail-item {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+}
+
+.event-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.event-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.event-text strong {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+  font-size: 1.05rem;
+}
+
+.event-text span {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Image styling */
+.baby-image-wrapper {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-premium);
+  background-color: var(--color-bg-surface-subtle);
+  aspect-ratio: 1 / 1;
+  transition: transform var(--transition-speed) var(--ease-premium);
+}
+
+.baby-image-wrapper:hover {
+  transform: translateY(-2px);
+}
+
+.baby-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .baby-hero-container {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    text-align: center;
+  }
+  .baby-hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .baby-hero-content p {
+    margin-inline: auto;
+  }
+  .event-details-card {
+    text-align: left;
+    margin-inline: auto;
+  }
+  .baby-hero-cta {
+    justify-content: center;
+  }
+  .baby-image-wrapper {
+    max-width: 500px;
+    margin-inline: auto;
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   3. Countdown Section
+   ========================================================================== */
+.countdown-section {
+  background-color: var(--color-bg-surface-subtle);
+  text-align: center;
+}
+
+.countdown-title {
+  font-size: 1.8rem;
+  margin-block-end: var(--space-lg);
+  color: var(--color-primary);
+}
+
+.countdown-grid {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.countdown-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  min-inline-size: 110px;
+  padding: var(--space-md) var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-speed) var(--ease-premium);
+}
+
+.countdown-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.countdown-value {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.countdown-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   4. Registry Cards & Diaper Raffle
+   ========================================================================== */
+.registry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-lg);
+  margin-block-end: var(--space-2xl);
+}
+
+.registry-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-sm);
+  box-shadow: var(--shadow-sm);
+  transition: 
+    border-color var(--transition-speed) var(--ease-premium),
+    transform var(--transition-speed) var(--ease-premium),
+    box-shadow var(--transition-speed) var(--ease-premium);
+}
+
+.registry-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-premium);
+}
+
+.registry-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.registry-card h3 {
+  font-size: 1.3rem;
+  color: var(--color-primary);
+}
+
+.registry-card p {
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+  flex-grow: 1;
+}
+
+.registry-link-text {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-accent);
+  margin-block-start: var(--space-xs);
+  transition: color 0.2s;
+}
+
+.registry-card:hover .registry-link-text {
+  color: var(--color-primary);
+}
+
+/* Diaper Raffle */
+.diaper-raffle-card {
+  background: linear-gradient(135deg, var(--color-bg-surface), var(--color-gold-bg));
+  border: 2px dashed var(--color-gold);
+  border-radius: 24px;
+  padding: var(--space-xl);
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+}
+
+.diaper-raffle-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-gold);
+  color: var(--color-bg-surface);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-2xs) var(--space-md);
+  border-radius: 9999px;
+  box-shadow: var(--shadow-sm);
+}
+
+.diaper-raffle-card h3 {
+  font-size: 1.5rem;
+  margin-block-end: var(--space-xs);
+  color: var(--color-gold);
+}
+
+.diaper-raffle-card p {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1.55;
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+/* ==========================================================================
+   5. RSVP Multi-step Wizard
+   ========================================================================== */
+.rsvp-section {
+  background-color: var(--color-bg-surface-subtle);
+}
+
+.rsvp-container {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.rsvp-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-premium);
+}
+
+.rsvp-header {
+  text-align: center;
+  margin-block-end: var(--space-xl);
+}
+
+.rsvp-header h2 {
+  font-size: 2.2rem;
+  color: var(--color-accent);
+  margin-block-end: var(--space-xs);
+}
+
+.rsvp-header p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* Wizard Steps styling */
+.rsvp-wizard {
+  position: relative;
+  overflow: hidden;
+}
+
+.wizard-progress-bar {
+  block-size: 6px;
+  background-color: var(--color-bg-surface-subtle);
+  border-radius: 9999px;
+  margin-block-end: var(--space-xl);
+  overflow: hidden;
+}
+
+.wizard-progress-fill {
+  block-size: 100%;
+  background-color: var(--color-accent);
+  transition: width 0.35s var(--ease-premium);
+}
+
+.wizard-step {
+  display: none;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.3s, transform 0.3s var(--ease-premium);
+}
+
+.wizard-step.active {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+  
+  @starting-style {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
+.wizard-step h3 {
+  font-size: 1.3rem;
+  margin-block-end: var(--space-lg);
+  border-block-end: 1px solid var(--color-border);
+  padding-block-end: var(--space-xs);
+}
+
+/* RSVP Choice Cards using :has(:checked) for premium interaction state */
+.rsvp-attend-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-block-end: var(--space-lg);
+}
+
+.attend-card {
+  cursor: pointer;
+  display: block;
+}
+
+.attend-card input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.attend-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-lg) var(--space-md);
+  background-color: var(--color-bg-surface-subtle);
+  border: 1.5px solid var(--color-border);
+  border-radius: 16px;
+  transition: 
+    border-color var(--transition-speed) var(--ease-premium),
+    background-color var(--transition-speed) var(--ease-premium),
+    transform var(--transition-speed) var(--ease-premium),
+    box-shadow var(--transition-speed) var(--ease-premium);
+}
+
+.attend-emoji {
+  font-size: 2.2rem;
+  line-height: 1;
+  margin-block-end: var(--space-xs);
+}
+
+.attend-card-content strong {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  margin-block-end: 4px;
+}
+
+.attend-card-content span {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* Hover effects */
+.attend-card:hover .attend-card-content {
+  border-color: var(--color-border-hover);
+  transform: translateY(-2px);
+}
+
+/* Selection state styled using :has() - clean, semantic, JS-free */
+.attend-card:has(input:checked) .attend-card-content {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-subtle);
+  box-shadow: var(--shadow-md);
+  transform: scale(1.02);
+}
+
+.wizard-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-block-start: var(--space-xl);
+}
+
+.wizard-buttons button {
+  min-inline-size: 110px;
+}
+
+/* Form error states */
+.form-group input:user-invalid {
+  border-color: hsl(0 70% 50%);
+  background-color: hsl(0 70% 98% / 0.05);
+}
+.form-group input:user-invalid + .error-msg {
+  display: block;
+}
+
+/* Success Screen animation */
+.wizard-success-screen {
+  text-align: center;
+  padding-block: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  animation: successFadeIn 0.5s var(--ease-premium) forwards;
+}
+
+@keyframes successFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.success-icon {
+  width: 60px;
+  height: 60px;
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  border: 2px solid var(--color-accent);
+  margin-block-end: var(--space-xs);
+  animation: checkPulse 1s var(--ease-premium);
+}
+
+@keyframes checkPulse {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.wizard-success-screen h3 {
+  font-size: 1.8rem;
+  color: var(--color-accent);
+}
+
+.wizard-success-screen p {
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  max-width: 400px;
+  line-height: 1.5;
+  margin-block-end: var(--space-lg);
+}
+
+@media (max-width: 480px) {
+  .rsvp-attend-choices {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   6. Guess Stats Game layout
+   ========================================================================== */
+.game-container {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-2xl);
+  align-items: start;
+}
+
+.game-form-wrapper {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-premium);
+}
+
+.game-badge {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--color-gold-bg);
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold);
+  padding: var(--space-2xs) var(--space-md);
+  border-radius: 9999px;
+  margin-block-end: var(--space-sm);
+}
+
+.game-form-wrapper h2 {
+  font-size: 1.8rem;
+  margin-block-end: var(--space-xs);
+  color: var(--color-accent);
+}
+
+.game-form-wrapper p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-block-end: var(--space-xl);
+}
+
+.game-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+/* Stats Cards styling */
+.game-stats-wrapper h3 {
+  font-size: 1.4rem;
+  margin-block-end: 2px;
+  color: var(--color-primary);
+}
+
+.game-stats-wrapper p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-block-end: var(--space-lg);
+}
+
+.stats-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-block-end: var(--space-xl);
+}
+
+.stat-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-speed) var(--ease-premium);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  margin-block-end: var(--space-2xs);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.stat-value {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+/* Guesses List styling */
+.game-recent-guesses {
+  border-block-start: 1px solid var(--color-border);
+  padding-block-start: var(--space-lg);
+}
+
+.game-recent-guesses h4 {
+  font-size: 1.05rem;
+  margin-block-end: var(--space-sm);
+}
+
+.recent-guesses-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-block-size: 250px;
+  overflow-y: auto;
+  padding-inline-end: var(--space-2xs);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.recent-guess-item {
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.85rem;
+  animation: cardFadeIn 0.3s var(--ease-premium) forwards;
+}
+
+.recent-guess-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.recent-guess-details {
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 850px) {
+  .game-container {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+  .stats-cards-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .stats-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}

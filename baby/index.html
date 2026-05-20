@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Tiny Human Gathering - The Wainright Family</title>
+  <meta name="description" content="Please join us for A Tiny Human Gathering! A baby shower with a cooler name, so the whole family can gather round the table! Celebrating Christian & Kelly on Sunday, August 9, 2026.">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/baby.css">
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/baby.js"></script>
+</head>
+<body>
+
+  <!-- Header / Navigation -->
+  <header>
+    <div class="container nav-container">
+      <a href="../index.html" class="logo" id="header-logo">Wainright</a>
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="../index.html" class="nav-link">Home</a></li>
+          <li><a href="index.html" class="nav-link active">Baby Shower 🍼</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions" style="display: flex; gap: var(--space-xs); align-items: center;">
+        <button class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <!-- Icon injected by main.js -->
+        </button>
+        <button class="mobile-menu-toggle" aria-expanded="false" aria-label="Open mobile navigation menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Baby Shower Hero Section -->
+    <section class="baby-hero section-padding">
+      <div class="container baby-hero-container">
+        <div class="baby-hero-content">
+          <span class="baby-badge">A Little Adventure Awaits</span>
+          <h1>A Tiny Human<br>Gathering</h1>
+          <p>
+            A baby shower with a cooler name, so the whole family can gather round the table! Celebrating Christian & Kelly.
+          </p>
+          
+          <!-- Event Info Box -->
+          <div class="event-details-card">
+            <div class="event-detail-item">
+              <span class="event-icon" aria-hidden="true">📅</span>
+              <div class="event-text">
+                <strong>Sunday, August 9, 2026</strong>
+                <span>2:00 PM</span>
+              </div>
+            </div>
+
+            <div class="event-detail-item">
+              <span class="event-icon" aria-hidden="true">📍</span>
+              <div class="event-text">
+                <strong>7151 Shannon Blvd</strong>
+                <span>Fort Myers, FL 33908</span>
+              </div>
+            </div>
+            
+            <div class="event-detail-item">
+              <span class="event-icon" aria-hidden="true">💡</span>
+              <div class="event-text">
+                <strong>Details</strong>
+                <span>Family gathering &bull; Kids welcome &bull; Come hungry. Good food, family, and gathering around the table.</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="baby-hero-cta">
+            <a href="#rsvp" class="btn btn-primary">RSVP Now 💌</a>
+            <a href="#registry" class="btn btn-secondary">Registries 🎁</a>
+          </div>
+        </div>
+
+        <div class="baby-image-wrapper">
+          <img src="../images/baby-banner.png" alt="A watercolor of a cozy wooden table set up with Catan-like hex board game tiles, dice, meeples, coffee mug, and a glowing warm candle lantern, framed by eucalyptus leaves." width="800" height="800" class="baby-hero-image" fetchpriority="high">
+        </div>
+      </div>
+    </section>
+
+    <!-- Countdown Section -->
+    <section class="countdown-section section-padding">
+      <div class="container">
+        <h2 class="countdown-title">Counting Down the Days</h2>
+        <div class="countdown-grid" id="countdown-timer">
+          <div class="countdown-card">
+            <span class="countdown-value" id="days-val">00</span>
+            <span class="countdown-label">Days</span>
+          </div>
+          <div class="countdown-card">
+            <span class="countdown-value" id="hours-val">00</span>
+            <span class="countdown-label">Hours</span>
+          </div>
+          <div class="countdown-card">
+            <span class="countdown-value" id="mins-val">00</span>
+            <span class="countdown-label">Minutes</span>
+          </div>
+          <div class="countdown-card">
+            <span class="countdown-value" id="secs-val">00</span>
+            <span class="countdown-label">Seconds</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Registries Section -->
+    <section id="registry" class="registry-section section-padding">
+      <div class="container">
+        <div class="section-header">
+          <h2>Tiny Human Supply Depot</h2>
+          <p>We are incredibly grateful for your love and support. If you wish to send a gift, our registries are linked below:</p>
+        </div>
+
+        <div class="registry-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); max-width: 800px; margin-inline: auto;">
+          <!-- Babylist -->
+          <a href="https://www.babylist.com" target="_blank" rel="noopener noreferrer" class="registry-card">
+            <div class="registry-icon">👶</div>
+            <h3>Babylist</h3>
+            <p>Our main registry, containing eco-friendly products, apparel, and toys.</p>
+            <span class="registry-link-text">Visit Registry &rarr;</span>
+          </a>
+
+          <!-- Amazon -->
+          <a href="https://www.amazon.com" target="_blank" rel="noopener noreferrer" class="registry-card">
+            <div class="registry-icon">📦</div>
+            <h3>Amazon</h3>
+            <p>Books, developmental toys, nursery utilities, and larger gear essentials.</p>
+            <span class="registry-link-text">Visit Registry &rarr;</span>
+          </a>
+        </div>
+
+        <!-- Diaper Raffle Card -->
+        <div class="diaper-raffle-card">
+          <div class="diaper-raffle-badge">Fun Activity!</div>
+          <h3>The Diaper Raffle</h3>
+          <p>
+            Want to win a fun prize? Bring a pack of diapers (any size!) to the shower, and you'll get a ticket to enter into our diaper raffle draw. The more packs you bring, the more chances to win!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RSVP Section -->
+    <section id="rsvp" class="rsvp-section section-padding">
+      <div class="container rsvp-container">
+        <div class="rsvp-card">
+          <div class="rsvp-header">
+            <h2>Kindly RSVP</h2>
+            <p>Please reply by <strong>July 26, 2026</strong>. You can RSVP below or contact Kiki (ageliki@wainright.net | 239-210-8884).</p>
+          </div>
+
+          <!-- RSVP Wizard / Multi-step Form -->
+          <div class="rsvp-wizard" id="rsvp-wizard">
+            
+            <!-- Progress Bar -->
+            <div class="wizard-progress-bar" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
+              <div class="wizard-progress-fill" id="progress-fill" style="inline-size: 33.3%;"></div>
+            </div>
+
+            <form id="rsvp-form" novalidate>
+              
+              <!-- Step 1: Attend Status -->
+              <div class="wizard-step active" data-step="1">
+                <h3>Will you be attending?</h3>
+                <div class="rsvp-attend-choices">
+                  <label class="attend-card">
+                    <input type="radio" name="attending" value="yes" required>
+                    <span class="attend-card-content">
+                      <span class="attend-emoji">🎉</span>
+                      <strong>Yes, gladly!</strong>
+                      <span>Can't wait to celebrate!</span>
+                    </span>
+                  </label>
+
+                  <label class="attend-card">
+                    <input type="radio" name="attending" value="no" required>
+                    <span class="attend-card-content">
+                      <span class="attend-emoji">🌸</span>
+                      <strong>No, regretfully</strong>
+                      <span>Sending warm wishes!</span>
+                    </span>
+                  </label>
+                </div>
+                <div class="wizard-buttons">
+                  <button type="button" class="btn btn-next" id="step1-next" disabled>Continue &rarr;</button>
+                </div>
+              </div>
+
+              <!-- Step 2: Guest details -->
+              <div class="wizard-step" data-step="2">
+                <h3>Guest Information</h3>
+                
+                <div class="form-group">
+                  <label for="rsvp-name">Your Full Name</label>
+                  <input type="text" id="rsvp-name" name="name" required placeholder="e.g., Jane Watson">
+                  <span class="error-msg" id="rsvp-name-error">Please enter your name.</span>
+                </div>
+
+                <div class="form-group attendee-only-field">
+                  <label for="rsvp-count">Total Number of Guests (including you)</label>
+                  <select id="rsvp-count" name="guests">
+                    <option value="1">1 Guest</option>
+                    <option value="2">2 Guests</option>
+                    <option value="3">3 Guests</option>
+                    <option value="4">4 Guests</option>
+                  </select>
+                </div>
+
+                <div class="form-group attendee-only-field">
+                  <label for="rsvp-diet">Dietary Restrictions (optional)</label>
+                  <input type="text" id="rsvp-diet" name="diet" placeholder="e.g., Vegetarian, Gluten Free">
+                </div>
+
+                <div class="wizard-buttons">
+                  <button type="button" class="btn btn-secondary btn-prev">&larr; Back</button>
+                  <button type="button" class="btn btn-next" id="step2-next">Continue &rarr;</button>
+                </div>
+              </div>
+
+              <!-- Step 3: Advice and Submit -->
+              <div class="wizard-step" data-step="3">
+                <h3>Advice & Notes</h3>
+                
+                <div class="form-group attendee-only-field">
+                  <label for="rsvp-song">Got a song recommendation for the shower playlist?</label>
+                  <input type="text" id="rsvp-song" name="song" placeholder="e.g., Sweet Child O' Mine">
+                </div>
+
+                <div class="form-group">
+                  <label for="rsvp-advice">A word of advice or message for the parents-to-be?</label>
+                  <textarea id="rsvp-advice" name="advice" rows="3" placeholder="Get ready for board games! We're so happy for you..."></textarea>
+                </div>
+
+                <div class="wizard-buttons">
+                  <button type="button" class="btn btn-secondary btn-prev">&larr; Back</button>
+                  <button type="submit" class="btn btn-primary" id="rsvp-submit-btn">Submit RSVP ✨</button>
+                </div>
+              </div>
+
+            </form>
+
+            <!-- Success Screen -->
+            <div class="wizard-success-screen" id="rsvp-success" style="display: none;">
+              <div class="success-icon">✓</div>
+              <h3>Thank You!</h3>
+              <p id="success-msg">Your RSVP has been submitted successfully.</p>
+              <button class="btn btn-secondary" id="rsvp-reset-btn">Update RSVP</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guess Baby Stats Game -->
+    <section class="game-section section-padding">
+      <div class="container game-container">
+        <div class="game-form-wrapper">
+          <div class="game-badge">Party Game 🎮</div>
+          <h2>Guess the Baby Stats!</h2>
+          <p>
+            What will Baby Wainright be like? Place your guesses below and we will tally them up for a fun reveal at the baby shower!
+          </p>
+
+          <form id="guess-form" novalidate>
+            <div class="game-inputs-grid">
+              
+              <div class="form-group">
+                <label for="guess-name">Your Name</label>
+                <input type="text" id="guess-name" required placeholder="e.g., Kelly's Mom">
+                <span class="error-msg" id="guess-name-error">Please enter your name.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="guess-date">Birth Date Guess</label>
+                <input type="date" id="guess-date" required min="2026-07-15" max="2026-09-15" value="2026-08-10">
+              </div>
+
+              <div class="form-group">
+                <label>Birth Weight Guess</label>
+                <div style="display: flex; gap: var(--space-xs);">
+                  <div style="flex: 1;">
+                    <select id="guess-weight-lbs" aria-label="Pounds">
+                      <option value="5">5 lbs</option>
+                      <option value="6">6 lbs</option>
+                      <option value="7" selected>7 lbs</option>
+                      <option value="8">8 lbs</option>
+                      <option value="9">9 lbs</option>
+                      <option value="10">10 lbs</option>
+                    </select>
+                  </div>
+                  <div style="flex: 1;">
+                    <select id="guess-weight-oz" aria-label="Ounces">
+                      <option value="0">0 oz</option>
+                      <option value="2">2 oz</option>
+                      <option value="4">4 oz</option>
+                      <option value="6">6 oz</option>
+                      <option value="8" selected>8 oz</option>
+                      <option value="10">10 oz</option>
+                      <option value="12">12 oz</option>
+                      <option value="14">14 oz</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="guess-hair">Hair Color Guess</label>
+                <select id="guess-hair" required>
+                  <option value="Blonde">Blonde</option>
+                  <option value="Brown" selected>Brown</option>
+                  <option value="Black">Black</option>
+                  <option value="Red">Red</option>
+                  <option value="Bald">Bald / Peach Fuzz</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="guess-eyes">Eye Color Guess</label>
+                <select id="guess-eyes" required>
+                  <option value="Blue" selected>Blue</option>
+                  <option value="Brown">Brown</option>
+                  <option value="Green">Green</option>
+                  <option value="Hazel">Hazel</option>
+                </select>
+              </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="inline-size: 100%; margin-block-start: var(--space-md);">Submit Guess 🎲</button>
+          </form>
+        </div>
+
+        <!-- Live Statistics Panel -->
+        <div class="game-stats-wrapper">
+          <h3>Community Guesses</h3>
+          <p>Here's what our friends and family are predicting so far:</p>
+
+          <div class="stats-cards-grid">
+            <div class="stat-card">
+              <span class="stat-icon">📅</span>
+              <span class="stat-label">Avg. Due Date</span>
+              <strong class="stat-value" id="stat-avg-date">August 12, 2026</strong>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-icon">⚖️</span>
+              <span class="stat-label">Avg. Weight</span>
+              <strong class="stat-value" id="stat-avg-weight">7 lbs 6 oz</strong>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-icon">💇</span>
+              <span class="stat-label">Top Hair Color</span>
+              <strong class="stat-value" id="stat-top-hair">Brown</strong>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-icon">👁️</span>
+              <span class="stat-label">Top Eye Color</span>
+              <strong class="stat-value" id="stat-top-eyes">Blue</strong>
+            </div>
+          </div>
+          
+          <div class="game-recent-guesses">
+            <h4>Recent Guesses</h4>
+            <ul id="recent-guesses-list" class="recent-guesses-list">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-logo">Wainright</div>
+      <p>&copy; 2026 Wainright Family Website. All rights reserved.</p>
+      <p style="margin-block-start: var(--space-xs); font-size: 0.85rem;">
+        Made with love in our woodland home. 🌲
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

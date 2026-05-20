@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Wainright Family</title>
+  <meta name="description" content="Welcome to the official home of the Wainright family. Explore our milestones, view memories, sign our guestbook, and find details for our upcoming baby shower.">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/home.css">
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+
+  <!-- Header / Navigation -->
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="logo" id="header-logo">Wainright</a>
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="#hero" class="nav-link active">Home</a></li>
+          <li><a href="baby/index.html" class="nav-link">Baby Shower 🍼</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions" style="display: flex; gap: var(--space-xs); align-items: center;">
+        <button class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <!-- Icon injected by main.js -->
+        </button>
+        <button class="mobile-menu-toggle" aria-expanded="false" aria-label="Open mobile navigation menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section section-padding">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <span class="hero-badge">Welcome to our Home</span>
+          <h1>The Wainrights</h1>
+          <p>
+            Welcome to our little corner of the internet! We're Christian & Kelly, and we created this space to share our life updates, capture beautiful memories, and stay connected with family and friends. 
+          </p>
+          <p>
+            We have some exciting news to share—we are expecting our first baby this summer! Hop over to our baby shower page for all the celebration details and registry links.
+          </p>
+          <div class="hero-cta">
+            <a href="baby/index.html" class="btn btn-primary">Tiny Human Gathering 🍼</a>
+          </div>
+        </div>
+        <div class="hero-image-wrapper">
+          <img src="images/hero.png" alt="An elegant watercolor of the Wainright family home nestled in a beautiful sunset forest" width="800" height="800" class="hero-image" fetchpriority="high">
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-logo">Wainright</div>
+      <p>&copy; 2026 Wainright Family Website. All rights reserved.</p>
+      <p style="margin-block-start: var(--space-xs); font-size: 0.85rem;">
+        Made with love in our woodland home. 🌲
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

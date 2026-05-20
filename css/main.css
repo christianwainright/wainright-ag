@@ -1,0 +1,396 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300..600;1,300..600&family=Outfit:wght@300..800&display=swap');
+
+/* ==========================================================================
+   1. Design System Tokens (Tiers 1, 2, 3)
+   ========================================================================== */
+:root {
+  /* --- Tier 1: Literal Tokens --- */
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Outfit', var(--font-sans);
+
+  /* Literal Colors (HSL) */
+  --color-slate-50: 210 40% 98%;
+  --color-slate-100: 210 40% 96.1%;
+  --color-slate-200: 214 32% 91%;
+  --color-slate-300: 213 27% 84%;
+  --color-slate-700: 215 25% 27%;
+  --color-slate-800: 217 33% 17%;
+  --color-slate-900: 222 47% 11%;
+  --color-slate-950: 222 47% 6%;
+
+  --color-sage-50: 120 15% 95%;
+  --color-sage-100: 120 15% 90%;
+  --color-sage-200: 120 14% 80%;
+  --color-sage-600: 120 12% 40%;
+  --color-sage-700: 120 13% 30%;
+  --color-sage-800: 120 15% 20%;
+  --color-sage-900: 120 18% 12%;
+
+  --color-gold-100: 45 60% 95%;
+  --color-gold-400: 43 75% 58%;
+  --color-gold-500: 42 78% 50%;
+  --color-gold-600: 40 82% 40%;
+  
+  --color-blush-100: 12 70% 96%;
+  --color-blush-400: 12 60% 80%;
+  --color-blush-600: 12 50% 60%;
+
+  /* Spacing (using rem) */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+
+  /* Shadows (layered for premium depth) */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05), 0 0 1px 0 rgba(0, 0, 0, 0.1);
+  --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+
+  /* Animation */
+  --transition-speed: 0.3s;
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* --- Tier 2: Semantic Tokens & Adaptive Themes --- */
+  /* Enable automatic browser theme adjustments */
+  color-scheme: light dark;
+
+  /* Resolve dynamic colors using light-dark() */
+  --color-bg-base: light-dark(hsl(var(--color-slate-50)), hsl(var(--color-slate-950)));
+  --color-bg-surface: light-dark(hsl(0 0% 100%), hsl(var(--color-slate-900)));
+  --color-bg-surface-subtle: light-dark(hsl(var(--color-slate-100)), hsl(var(--color-slate-800)));
+  
+  --color-text-main: light-dark(hsl(var(--color-slate-800)), hsl(var(--color-slate-50)));
+  --color-text-muted: light-dark(hsl(var(--color-slate-700) / 0.75), hsl(var(--color-slate-200) / 0.7));
+  --color-text-inverse: light-dark(hsl(var(--color-slate-50)), hsl(var(--color-slate-900)));
+
+  --color-accent: light-dark(hsl(var(--color-sage-700)), hsl(var(--color-sage-200)));
+  --color-accent-subtle: light-dark(hsl(var(--color-sage-50)), hsl(var(--color-sage-900)));
+  --color-primary: light-dark(hsl(var(--color-slate-900)), hsl(0 0% 100%));
+
+  --color-border: light-dark(hsl(var(--color-slate-200)), hsl(var(--color-slate-800)));
+  --color-border-hover: light-dark(hsl(var(--color-slate-300)), hsl(var(--color-slate-700)));
+
+  /* Glassmorphism settings */
+  --glass-bg: light-dark(rgba(255, 255, 255, 0.65), rgba(15, 23, 42, 0.5));
+  --glass-border: light-dark(rgba(226, 232, 240, 0.8), rgba(30, 41, 59, 0.5));
+  --glass-backdrop-filter: blur(12px) saturate(190%);
+}
+
+/* ==========================================================================
+   2. Modern CSS Reset (No global '*' resets)
+   ========================================================================== */
+html {
+  box-sizing: border-box;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-main);
+  text-rendering: optimizeSpeed;
+  transition: background-color var(--transition-speed) var(--ease-premium), color var(--transition-speed) var(--ease-premium);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+ul, ol {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   3. Interactivity & Focus Management
+   ========================================================================== */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+button, .btn {
+  cursor: pointer;
+  touch-action: manipulation;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-block-size: 44px; /* Accessible touch target */
+  min-inline-size: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  color: var(--color-bg-base);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: 
+    background-color var(--transition-speed) var(--ease-premium),
+    transform 0.15s var(--ease-premium),
+    box-shadow var(--transition-speed) var(--ease-premium);
+}
+
+button:hover:not(:disabled), .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+button:active:not(:disabled), .btn:active {
+  transform: translateY(0);
+}
+
+button:disabled, .btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Secondary Button variant */
+.btn-secondary {
+  background-color: var(--color-bg-surface-subtle);
+  border-color: var(--color-border);
+  color: var(--color-text-main);
+}
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-bg-surface);
+  border-color: var(--color-border-hover);
+}
+
+/* High Contrast Mode fallback */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid ButtonText;
+  }
+  button, .btn {
+    border: 1px solid ButtonText;
+    background-color: ButtonFace;
+    color: ButtonText;
+  }
+}
+
+/* ==========================================================================
+   4. Layout Utilities
+   ========================================================================== */
+.container {
+  inline-size: 90%;
+  max-inline-size: 1200px;
+  margin-inline: auto;
+}
+
+.section-padding {
+  padding-block: clamp(var(--space-2xl), 6vw, var(--space-3xl));
+}
+
+/* Grid & Flex Utilities */
+.grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Header & Navigation */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  border-block-end: 1px solid var(--glass-border);
+  transition: background var(--transition-speed) var(--ease-premium), border-color var(--transition-speed) var(--ease-premium);
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  block-size: 70px;
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-menu {
+  display: flex;
+  gap: var(--space-xl);
+}
+
+.nav-link {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  position: relative;
+  padding-block: var(--space-xs);
+  transition: color var(--transition-speed) var(--ease-premium);
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--color-primary);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--transition-speed) var(--ease-premium);
+}
+
+.nav-link:hover::after, .nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Theme Switcher */
+.theme-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-main);
+  padding: var(--space-xs);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 40px;
+  min-inline-size: 40px;
+  transition: background-color var(--transition-speed) var(--ease-premium), transform 0.2s;
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--color-bg-surface-subtle);
+  transform: rotate(15deg);
+  box-shadow: none;
+}
+
+.theme-toggle-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Mobile Nav Toggles */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-text-main);
+  padding: var(--space-xs);
+  min-block-size: 40px;
+  min-inline-size: 40px;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-toggle {
+    display: block;
+  }
+  .nav-menu {
+    position: absolute;
+    top: 71px;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-bg-surface);
+    border-block-end: 1px solid var(--color-border);
+    flex-direction: column;
+    padding: var(--space-xl);
+    gap: var(--space-lg);
+    display: none; /* Toggled by class */
+    box-shadow: var(--shadow-lg);
+  }
+  .nav-menu.open {
+    display: flex;
+  }
+}
+
+/* Footer styling */
+footer {
+  background-color: var(--color-bg-surface-subtle);
+  border-block-start: 1px solid var(--color-border);
+  padding-block: var(--space-2xl);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.footer-logo {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.2rem;
+  margin-block-end: var(--space-sm);
+  color: var(--color-primary);
+}
+
+/* Accessibility: Reduced motion settings */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
