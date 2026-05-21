@@ -12,5 +12,11 @@ service cloud.firestore {
       allow create: if true;
       allow read, update, delete: if false;
     }
+
+    // Contacts Collection: Anyone can submit a contact request, but they are write-only.
+    match /contacts/{contactId} {
+      allow create: if true;
+      allow read, update, delete: if false;
+    }
   }
 }

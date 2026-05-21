@@ -118,3 +118,44 @@ exports.onGuessCreated = onDocumentCreated({
     console.error("Failed to send Guess email:", error);
   }
 });
+
+/**
+ * Trigger: On new Contact document created
+ */
+exports.onContactCreated = onDocumentCreated({
+  document: "contacts/{contactId}",
+  secrets: ["SMTP_USER", "OAUTH_CLIENT_ID", "OAUTH_CLIENT_SECRET", "OAUTH_REFRESH_TOKEN"]
+}, async (event) => {
+  const snap = event.data;
+  if (!snap) return null;
+  
+  const data = snap.data();
+  const name = data.name || "Anonymous";
+  const email = data.email || "Not provided";
+  const subject = data.subject || "No Subject";
+  const message = data.message || "No Message";
+  
+  const transporter = getTransporter();
+  if (!transporter) return null;
+  
+  const emailSubject = `Contact Form Submission: ${subject}`;
+  const body = `You have received a new contact form submission on wainright.net!\n\n` +
+               `Name: ${name}\n` +
+               `Email: ${email}\n` +
+               `Subject: ${subject}\n\n` +
+               `Message:\n${message}\n\n` +
+               `This is an automated notification from wainright.net.`;
+               
+  try {
+    await transporter.sendMail({
+      from: `"Wainright Net" <${process.env.SMTP_USER}>`,
+      to: "christianwainright@gmail.com",
+      subject: emailSubject,
+      text: body
+    });
+    console.log(`Contact email sent successfully for ${name}`);
+  } catch (error) {
+    console.error("Failed to send contact email:", error);
+  }
+});
+

@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/home.css">
   <script defer src="js/main.js"></script>
+  <script type="module" src="js/contact.js"></script>
 </head>
 <body>
 
@@ -19,6 +20,7 @@
         <ul class="nav-menu">
           <li><a href="#hero" class="nav-link active">Home</a></li>
           <li><a href="baby/index.html" class="nav-link">Baby Shower 🍼</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
       </nav>
       <div class="nav-actions" style="display: flex; gap: var(--space-xs); align-items: center;">
@@ -51,6 +53,77 @@
           <div class="hero-cta">
             <a href="baby/index.html" class="btn btn-primary">Upcoming Celebration 🍼</a>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section section-padding">
+      <div class="container contact-container">
+        <div class="contact-card">
+          <h2>Get in Touch</h2>
+          <p class="contact-subtitle">Have a question or just want to say hi? Drop us a line below.</p>
+          
+          <form id="contact-form" novalidate>
+            <!-- Honeypot field (hidden from users) -->
+            <div class="visually-hidden" aria-hidden="true">
+              <label for="contact-honeypot">If you are human, leave this blank</label>
+              <input type="text" id="contact-honeypot" name="honeypot" tabindex="-1" autocomplete="off">
+            </div>
+
+            <!-- Name Field -->
+            <div class="form-group">
+              <label for="contact-name">Name</label>
+              <input type="text" id="contact-name" name="name" required autocomplete="name" placeholder="Your name">
+              <span class="error-message" id="name-error" aria-live="polite"></span>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+              <label for="contact-email">Email Address</label>
+              <input type="email" id="contact-email" name="email" required autocomplete="email" placeholder="you@example.com">
+              <span class="error-message" id="email-error" aria-live="polite"></span>
+            </div>
+
+            <!-- Subject Field -->
+            <div class="form-group">
+              <label for="contact-subject">Subject</label>
+              <input type="text" id="contact-subject" name="subject" required placeholder="What is this about?">
+              <span class="error-message" id="subject-error" aria-live="polite"></span>
+            </div>
+
+            <!-- Message Field -->
+            <div class="form-group">
+              <label for="contact-message">Message</label>
+              <textarea id="contact-message" name="message" required rows="5" placeholder="Write your message here..."></textarea>
+              <span class="error-message" id="message-error" aria-live="polite"></span>
+            </div>
+
+            <!-- Robot Protection (Captcha) -->
+            <div class="form-group captcha-group">
+              <label for="contact-captcha">
+                Robot Protection: What is <span id="captcha-num1">?</span> + <span id="captcha-num2">?</span>?
+              </label>
+              <div class="captcha-input-wrapper">
+                <input type="text" id="contact-captcha" name="captcha" required inputmode="numeric" pattern="\d+" placeholder="Enter sum">
+              </div>
+              <span class="error-message" id="captcha-error" aria-live="polite"></span>
+            </div>
+
+            <!-- Status Alerts -->
+            <div class="status-alert alert-success" id="form-success" aria-live="polite" style="display: none;">
+              <strong>Thank you!</strong> Your message has been sent successfully.
+            </div>
+            <div class="status-alert alert-danger" id="form-error" aria-live="polite" style="display: none;">
+              <strong>Error:</strong> Something went wrong. Please check the fields and try again.
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary" id="contact-submit-btn">
+              <span>Send Message</span>
+              <span class="spinner" id="contact-spinner" style="display: none;"></span>
+            </button>
+          </form>
         </div>
       </div>
     </section>

@@ -67,3 +67,179 @@
     transform: translateY(0);
   }
 }
+
+/* ==========================================================================
+   Contact Form Section Styles
+   ========================================================================== */
+
+.contact-section {
+  background-color: var(--color-bg-base);
+  transition: background-color var(--transition-speed) var(--ease-premium);
+}
+
+.contact-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-card {
+  width: 100%;
+  max-inline-size: 600px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.5rem;
+  padding: var(--space-xl) var(--space-lg);
+  box-shadow: var(--shadow-premium);
+  animation: fadeIn 0.8s var(--ease-premium);
+}
+
+.contact-card h2 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  margin-block-end: var(--space-xs);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.contact-subtitle {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-lg);
+}
+
+.contact-card form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-main);
+  margin-block-end: var(--space-xs);
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  background-color: var(--color-bg-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--color-text-main);
+  transition: border-color var(--transition-speed) var(--ease-premium), 
+              box-shadow var(--transition-speed) var(--ease-premium),
+              background-color var(--transition-speed) var(--ease-premium);
+}
+
+.form-group input:hover,
+.form-group textarea:hover {
+  border-color: var(--color-border-hover);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-subtle);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-block-size: 120px;
+}
+
+.form-group input.invalid,
+.form-group textarea.invalid {
+  border-color: hsl(0, 80%, 60%) !important;
+}
+
+.form-group input.invalid:focus,
+.form-group textarea.invalid:focus {
+  box-shadow: 0 0 0 3px hsla(0, 80%, 60%, 0.15) !important;
+}
+
+.error-message {
+  font-size: 0.8rem;
+  color: hsl(0, 80%, 60%);
+  margin-block-start: var(--space-2xs);
+  min-block-size: 1.2rem;
+  display: block;
+}
+
+/* Captcha styling */
+.captcha-group .captcha-input-wrapper {
+  max-inline-size: 160px;
+}
+
+/* Visually Hidden Helper (Accessible Honeypot) */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Status Alerts */
+.status-alert {
+  border-radius: 0.75rem;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+  line-height: 1.4;
+  animation: fadeIn 0.4s var(--ease-premium);
+}
+
+.alert-success {
+  background-color: var(--color-accent-subtle);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.alert-danger {
+  background-color: light-dark(hsl(0 80% 96%), hsl(0 60% 12%));
+  border-color: light-dark(hsl(0 80% 80%), hsl(0 60% 25%));
+  color: light-dark(hsl(0 80% 30%), hsl(0 80% 85%));
+}
+
+/* Spinner anim */
+.spinner {
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  margin-inline-start: var(--space-xs);
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
