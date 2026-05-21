@@ -412,21 +412,96 @@
   transition: width 0.35s var(--ease-premium);
 }
 
+#rsvp-form {
+  position: relative;
+  min-height: 280px;
+  transition: min-height 0.35s ease;
+}
+
 .wizard-step {
   display: none;
-  opacity: 0;
-  transform: translateX(20px);
-  transition: opacity 0.3s, transform 0.3s var(--ease-premium);
+  width: 100%;
 }
 
 .wizard-step.active {
   display: block;
-  opacity: 1;
-  transform: translateX(0);
-  
-  @starting-style {
+}
+
+/* Going Forward */
+.wizard-step.entering-right {
+  animation: slideInRight 0.35s forwards var(--ease-premium);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.wizard-step.exiting-left {
+  display: block;
+  animation: slideOutLeft 0.35s forwards var(--ease-premium);
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+/* Going Backward */
+.wizard-step.entering-left {
+  animation: slideInLeft 0.35s forwards var(--ease-premium);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.wizard-step.exiting-right {
+  display: block;
+  animation: slideOutRight 0.35s forwards var(--ease-premium);
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+@keyframes slideInRight {
+  from {
     opacity: 0;
-    transform: translateX(20px);
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(40px);
   }
 }
 
@@ -843,4 +918,139 @@ html[data-auth="true"] body.locked #password-overlay {
   font-size: 0.82rem;
   margin-block-start: var(--space-xs);
   text-align: left;
+}
+
+/* Custom Selectable Tiles for Guess Form */
+.custom-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+  gap: var(--space-xs);
+  margin-block-start: var(--space-xs);
+}
+
+.tile-option {
+  background-color: var(--color-bg-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast) var(--ease-premium);
+}
+
+.tile-option:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  background-color: var(--color-bg-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.tile-option.selected {
+  border-color: var(--color-accent);
+  background-color: var(--color-bg-surface);
+  box-shadow: 0 0 0 3px rgba(212, 163, 89, 0.25);
+  outline: none;
+}
+
+.tile-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.tile-option.selected .tile-swatch::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+.tile-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* Hair colors swatches */
+.hair-blonde { background-color: #E2C068; }
+.hair-brown  { background-color: #5C4033; }
+.hair-black  { background-color: #1A1A1A; }
+.hair-red    { background-color: #C04000; }
+.hair-bald   { background-color: #F8D7DA; border: 1px dashed rgba(0,0,0,0.15); }
+
+/* Eye colors swatches */
+.eye-blue   { background-color: #4A90E2; }
+.eye-brown  { background-color: #6E533F; }
+.eye-green  { background-color: #4B905F; }
+.eye-hazel  { background: linear-gradient(135deg, #6E533F, #8F9E58); }
+
+/* Custom Mini Calendar for Stats Card */
+.mini-calendar {
+  width: 48px;
+  height: 50px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-heading);
+  margin-block-end: var(--space-xs);
+}
+
+.calendar-month {
+  width: 100%;
+  background-color: var(--color-accent);
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-align: center;
+  padding-block: 1px;
+  letter-spacing: 0.5px;
+}
+
+.calendar-day {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1.3;
+}
+
+/* Dynamic Stats Swatches */
+.visual-swatch-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-block-end: var(--space-xs);
+}
+
+.color-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Confetti Overlay Canvas */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  pointer-events: none;
 }

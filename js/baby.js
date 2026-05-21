@@ -169,6 +169,8 @@ function initRSVPWizard() {
       form.style.display = 'none';
       progressBar.style.display = 'none';
       successScreen.style.display = 'flex';
+      
+      triggerConfetti();
 
       const successMsg = document.getElementById('success-msg');
       if (rsvpData.attending === 'yes') {
@@ -201,11 +203,32 @@ function initRSVPWizard() {
   });
 
   function goToStep(step) {
-    steps.forEach(s => s.classList.remove('active'));
+    const prevStep = currentStep;
     currentStep = step;
-    
+
+    const currentActive = wizard.querySelector('.wizard-step.active');
     const targetStep = wizard.querySelector(`.wizard-step[data-step="${currentStep}"]`);
-    if (targetStep) {
+
+    if (currentActive && targetStep && currentActive !== targetStep) {
+      const goingForward = step > prevStep;
+      
+      // Determine classes
+      const exitClass = goingForward ? 'exiting-left' : 'exiting-right';
+      const enterClass = goingForward ? 'entering-right' : 'entering-left';
+      
+      // Apply transitions
+      currentActive.classList.add(exitClass);
+      currentActive.classList.remove('active');
+      
+      targetStep.classList.add(enterClass);
+      targetStep.classList.add('active');
+      
+      // Clean up after animation finishes (350ms)
+      setTimeout(() => {
+        currentActive.classList.remove(exitClass);
+        targetStep.classList.remove(enterClass);
+      }, 350);
+    } else if (targetStep) {
       targetStep.classList.add('active');
     }
 
@@ -303,8 +326,50 @@ const DEFAULT_GUESSES = [
 function initStatsGame() {
   const form = document.getElementById('guess-form');
   const guessesList = document.getElementById('recent-guesses-list');
+  const guessSuccess = document.getElementById('guess-success');
+  const guessResetBtn = document.getElementById('guess-reset-btn');
 
   if (!form || !guessesList) return;
+
+  // Initialize Custom Selectable Tiles
+  const setupCustomTiles = (gridClass, hiddenInputId) => {
+    const grid = form.querySelector(`.${gridClass}`);
+    const hiddenInput = document.getElementById(hiddenInputId);
+    if (!grid || !hiddenInput) return;
+
+    const options = grid.querySelectorAll('.tile-option');
+    options.forEach(option => {
+      option.addEventListener('click', () => {
+        // Deselect all
+        options.forEach(opt => opt.classList.remove('selected'));
+        // Select current
+        option.classList.add('selected');
+        // Update value of hidden input
+        hiddenInput.value = option.dataset.value;
+      });
+    });
+  };
+
+  setupCustomTiles('hair-tile-grid', 'guess-hair');
+  setupCustomTiles('eye-tile-grid', 'guess-eyes');
+
+  if (guessResetBtn && guessSuccess) {
+    guessResetBtn.addEventListener('click', () => {
+      form.reset();
+      
+      // Reset custom tiles selection to defaults
+      form.querySelectorAll('.tile-option').forEach(opt => opt.classList.remove('selected'));
+      const defaultHair = form.querySelector('.hair-tile-grid .tile-option[data-value="Brown"]');
+      const defaultEyes = form.querySelector('.eye-tile-grid .tile-option[data-value="Blue"]');
+      if (defaultHair) defaultHair.classList.add('selected');
+      if (defaultEyes) defaultEyes.classList.add('selected');
+      document.getElementById('guess-hair').value = 'Brown';
+      document.getElementById('guess-eyes').value = 'Blue';
+
+      form.style.display = 'block';
+      guessSuccess.style.display = 'none';
+    });
+  }
 
   // Real-time Firestore Listener
   const q = query(collection(db, 'guesses'), orderBy('timestamp', 'desc'));
@@ -374,9 +439,12 @@ function initStatsGame() {
       // Save directly to Cloud Firestore
       await addDoc(collection(db, 'guesses'), newGuess);
       
-      // Reset Form & Show Success Alert
-      form.reset();
-      alert('Thank you! Your guess has been recorded and Christian has been notified! 👶✨');
+      // Hide form and show success screen
+      form.style.display = 'none';
+      if (guessSuccess) {
+        guessSuccess.style.display = 'flex';
+      }
+      triggerConfetti();
     } catch (err) {
       console.error('Error saving guess to Firestore:', err);
       alert('Oops! There was an issue submitting your guess. Please try again.');
@@ -401,6 +469,16 @@ function updateStatsDashboard(guesses) {
   const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
   document.getElementById('stat-avg-date').textContent = avgDate.toLocaleDateString('en-US', dateOptions);
 
+  // Update Mini Calendar Icon
+  const monthVal = avgDate.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+  const dayVal = avgDate.getDate();
+  const calendarDayVal = document.getElementById('calendar-day-val');
+  const calendarIcon = document.getElementById('calendar-icon');
+  if (calendarIcon && calendarDayVal) {
+    calendarIcon.querySelector('.calendar-month').textContent = monthVal;
+    calendarDayVal.textContent = dayVal;
+  }
+
   // 2. Average Weight
   let totalOunces = 0;
   guesses.forEach(g => {
@@ -419,6 +497,13 @@ function updateStatsDashboard(guesses) {
   const topHair = Object.keys(hairCounts).reduce((a, b) => hairCounts[a] > hairCounts[b] ? a : b);
   document.getElementById('stat-top-hair').textContent = topHair;
 
+  // Update Hair Swatch
+  const hairDisplay = document.getElementById('hair-swatch-display');
+  if (hairDisplay) {
+    const cleanHair = topHair.toLowerCase().split(' ')[0]; // 'blonde', 'brown', 'black', 'red', 'bald'
+    hairDisplay.innerHTML = `<span class="color-dot hair-${cleanHair}"></span>`;
+  }
+
   // 4. Mode of Eye Color
   const eyeCounts = {};
   guesses.forEach(g => {
@@ -426,6 +511,13 @@ function updateStatsDashboard(guesses) {
   });
   const topEyes = Object.keys(eyeCounts).reduce((a, b) => eyeCounts[a] > eyeCounts[b] ? a : b);
   document.getElementById('stat-top-eyes').textContent = topEyes;
+
+  // Update Eye Swatch
+  const eyesDisplay = document.getElementById('eyes-swatch-display');
+  if (eyesDisplay) {
+    const cleanEyes = topEyes.toLowerCase(); // 'blue', 'brown', 'green', 'hazel'
+    eyesDisplay.innerHTML = `<span class="color-dot eye-${cleanEyes}"></span>`;
+  }
 }
 
 function renderGuessesList(guesses) {
@@ -465,4 +557,116 @@ function escapeHTML(str) {
       '"': '&quot;'
     }[tag] || tag)
   );
+}
+
+function triggerConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let animationFrameId;
+
+  // Set canvas size to screen
+  const resizeCanvas = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+  resizeCanvas();
+
+  const colors = [
+    '#E2C068', // Honey Gold
+    '#5C4033', // Brown
+    '#4A90E2', // Blue
+    '#4B905F', // Green
+    '#C04000', // Red-Orange
+    '#2E5A44'  // Forest Green
+  ];
+
+  const particles = [];
+  const particleCount = 120;
+
+  // Confetti Particle class
+  class Particle {
+    constructor() {
+      this.x = canvas.width / 2;
+      this.y = canvas.height * 0.7; // Erupt from card height area
+      this.size = Math.random() * 8 + 6;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      
+      // Velocity vector (fountain shoot up)
+      const angle = Math.random() * Math.PI * 0.6 + Math.PI * 1.2; // Angle between 216 and 324 deg
+      const speed = Math.random() * 15 + 10;
+      this.vx = Math.cos(angle) * speed;
+      this.vy = Math.sin(angle) * speed;
+      
+      this.gravity = 0.35;
+      this.drag = 0.97;
+      this.rotation = Math.random() * 360;
+      this.rotationSpeed = Math.random() * 6 - 3;
+      this.opacity = 1;
+      this.fadeOut = Math.random() * 0.01 + 0.005;
+      this.shape = Math.random() > 0.4 ? 'rect' : 'circle';
+    }
+
+    update() {
+      this.vx *= this.drag;
+      this.vy *= this.drag;
+      this.vy += this.gravity;
+      this.x += this.vx;
+      this.y += this.vy;
+      this.rotation += this.rotationSpeed;
+      this.opacity -= this.fadeOut;
+    }
+
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate((this.rotation * Math.PI) / 180);
+      ctx.globalAlpha = this.opacity;
+      ctx.fillStyle = this.color;
+
+      if (this.shape === 'rect') {
+        ctx.fillRect(-this.size / 2, -this.size / 4, this.size, this.size / 2);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
+  // Populate particles
+  for (let i = 0; i < particleCount; i++) {
+    setTimeout(() => {
+      if (particles.length < particleCount) {
+        particles.push(new Particle());
+      }
+    }, i * 8);
+  }
+
+  // Animation Loop
+  const animate = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.update();
+      p.draw();
+
+      // Remove dead particles
+      if (p.opacity <= 0 || p.y > canvas.height) {
+        particles.splice(i, 1);
+      }
+    }
+
+    if (particles.length > 0) {
+      animationFrameId = requestAnimationFrame(animate);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      cancelAnimationFrame(animationFrameId);
+    }
+  };
+
+  animationFrameId = requestAnimationFrame(animate);
 }

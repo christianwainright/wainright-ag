@@ -342,30 +342,67 @@
               </div>
 
               <div class="form-group">
-                <label for="guess-hair">Hair Color Guess</label>
-                <select id="guess-hair" required>
-                  <option value="Blonde">Blonde</option>
-                  <option value="Brown" selected>Brown</option>
-                  <option value="Black">Black</option>
-                  <option value="Red">Red</option>
-                  <option value="Bald">Bald / Peach Fuzz</option>
-                </select>
+                <label>Hair Color Guess</label>
+                <input type="hidden" id="guess-hair" value="Brown" required>
+                <div class="custom-tile-grid hair-tile-grid">
+                  <button type="button" class="tile-option" data-value="Blonde">
+                    <span class="tile-swatch hair-blonde"></span>
+                    <span class="tile-label">Blonde</span>
+                  </button>
+                  <button type="button" class="tile-option selected" data-value="Brown">
+                    <span class="tile-swatch hair-brown"></span>
+                    <span class="tile-label">Brown</span>
+                  </button>
+                  <button type="button" class="tile-option" data-value="Black">
+                    <span class="tile-swatch hair-black"></span>
+                    <span class="tile-label">Black</span>
+                  </button>
+                  <button type="button" class="tile-option" data-value="Red">
+                    <span class="tile-swatch hair-red"></span>
+                    <span class="tile-label">Red</span>
+                  </button>
+                  <button type="button" class="tile-option" data-value="Bald">
+                    <span class="tile-swatch hair-bald"></span>
+                    <span class="tile-label">Bald</span>
+                  </button>
+                </div>
               </div>
 
               <div class="form-group">
-                <label for="guess-eyes">Eye Color Guess</label>
-                <select id="guess-eyes" required>
-                  <option value="Blue" selected>Blue</option>
-                  <option value="Brown">Brown</option>
-                  <option value="Green">Green</option>
-                  <option value="Hazel">Hazel</option>
-                </select>
+                <label>Eye Color Guess</label>
+                <input type="hidden" id="guess-eyes" value="Blue" required>
+                <div class="custom-tile-grid eye-tile-grid">
+                  <button type="button" class="tile-option selected" data-value="Blue">
+                    <span class="tile-swatch eye-blue"></span>
+                    <span class="tile-label">Blue</span>
+                  </button>
+                  <button type="button" class="tile-option" data-value="Brown">
+                    <span class="tile-swatch eye-brown"></span>
+                    <span class="tile-label">Brown</span>
+                  </button>
+                  <button type="button" class="tile-option" data-value="Green">
+                    <span class="tile-swatch eye-green"></span>
+                    <span class="tile-label">Green</span>
+                  </button>
+                  <button type="button" class="tile-option" data-value="Hazel">
+                    <span class="tile-swatch eye-hazel"></span>
+                    <span class="tile-label">Hazel</span>
+                  </button>
+                </div>
               </div>
 
             </div>
 
             <button type="submit" class="btn btn-primary" style="inline-size: 100%; margin-block-start: var(--space-md);">Submit Guess 🎲</button>
           </form>
+
+          <!-- Guess Success Screen -->
+          <div class="wizard-success-screen" id="guess-success" style="display: none; flex-direction: column; align-items: center; text-align: center; padding-block: var(--space-lg);">
+            <div class="success-icon">✓</div>
+            <h3>Guess Recorded!</h3>
+            <p>Thank you! Your guess has been added to the community averages dashboard.</p>
+            <button class="btn btn-secondary" id="guess-reset-btn" style="margin-block-start: var(--space-md);">Submit Another Guess</button>
+          </div>
         </div>
 
         <!-- Live Statistics Panel -->
@@ -375,7 +412,10 @@
 
           <div class="stats-cards-grid">
             <div class="stat-card">
-              <span class="stat-icon">📅</span>
+              <div class="mini-calendar" id="calendar-icon">
+                <div class="calendar-month">AUG</div>
+                <div class="calendar-day" id="calendar-day-val">12</div>
+              </div>
               <span class="stat-label">Avg. Due Date</span>
               <strong class="stat-value" id="stat-avg-date">August 12, 2026</strong>
             </div>
@@ -387,13 +427,17 @@
             </div>
 
             <div class="stat-card">
-              <span class="stat-icon">💇</span>
+              <div class="visual-swatch-display" id="hair-swatch-display">
+                <span class="color-dot hair-brown"></span>
+              </div>
               <span class="stat-label">Top Hair Color</span>
               <strong class="stat-value" id="stat-top-hair">Brown</strong>
             </div>
 
             <div class="stat-card">
-              <span class="stat-icon">👁️</span>
+              <div class="visual-swatch-display" id="eyes-swatch-display">
+                <span class="color-dot eye-blue"></span>
+              </div>
               <span class="stat-label">Top Eye Color</span>
               <strong class="stat-value" id="stat-top-eyes">Blue</strong>
             </div>
@@ -460,5 +504,7 @@
       }
     });
   </script>
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
 </body>
 </html>
