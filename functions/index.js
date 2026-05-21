@@ -4,19 +4,27 @@ const nodemailer = require("nodemailer");
 
 admin.initializeApp();
 
-// Configure the Nodemailer SMTP Transporter
+// Configure the Nodemailer Gmail OAuth2 Transporter
 const getTransporter = () => {
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const user = process.env.SMTP_USER; // e.g., christianwainright@gmail.com
+  const clientId = process.env.OAUTH_CLIENT_ID;
+  const clientSecret = process.env.OAUTH_CLIENT_SECRET;
+  const refreshToken = process.env.OAUTH_REFRESH_TOKEN;
   
-  if (!user || !pass) {
-    console.warn("SMTP_USER and SMTP_PASS environment variables are not set. Emails will not be sent.");
+  if (!user || !clientId || !clientSecret || !refreshToken) {
+    console.warn("Gmail OAuth2 credentials are not fully configured. Emails will not be sent.");
     return null;
   }
   
   return nodemailer.createTransport({
     service: "gmail",
-    auth: { user, pass }
+    auth: {
+      type: "OAuth2",
+      user: user,
+      clientId: clientId,
+      clientSecret: clientSecret,
+      refreshToken: refreshToken
+    }
   });
 };
 
