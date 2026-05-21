@@ -283,6 +283,21 @@ function initStatsGame() {
   updateStatsDashboard(guesses);
   renderGuessesList(guesses);
 
+  // Fetch remote guesses from Google Sheets if URL is configured
+  if (typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' && GOOGLE_APPS_SCRIPT_URL) {
+    fetch(GOOGLE_APPS_SCRIPT_URL)
+      .then(res => res.json())
+      .then(data => {
+        if (data.result === 'success' && data.guesses && data.guesses.length > 0) {
+          guesses = data.guesses;
+          localStorage.setItem('wainright_baby_guesses', JSON.stringify(guesses));
+          updateStatsDashboard(guesses);
+          renderGuessesList(guesses);
+        }
+      })
+      .catch(err => console.error('Error loading guesses from sheets:', err));
+  }
+
   // Form Submission
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
