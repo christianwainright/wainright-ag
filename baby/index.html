@@ -12,9 +12,21 @@
     if (sessionStorage.getItem('baby_shower_auth') === 'true') {
       document.documentElement.setAttribute('data-auth', 'true');
     }
+    // Test mode check
+    if (new URLSearchParams(window.location.search).get('test') === 'true') {
+      window.__testMode = true;
+    }
   </script>
   <script defer src="../js/main.js"></script>
-  <script type="module" src="../js/baby.js"></script>
+  <script type="module" src="../js/baby.js?v=1.0.3"></script>
+  <script>
+    if (window.__testMode) {
+      const testScript = document.createElement('script');
+      testScript.src = '../js/test-rsvp.js';
+      testScript.type = 'module';
+      document.head.appendChild(testScript);
+    }
+  </script>
 </head>
 <body class="locked">
   

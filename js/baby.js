@@ -164,17 +164,22 @@ function initRSVPWizard() {
     submitBtn.textContent = 'Sending RSVP... ✉️';
 
     try {
-      // Save directly to Firebase Firestore
-      await addDoc(collection(db, 'rsvps'), {
-        name: rsvpData.name,
-        email: rsvpData.email,
-        attending: rsvpData.attending,
-        guests: rsvpData.guests,
-        diet: rsvpData.diet,
-        song: rsvpData.song,
-        advice: rsvpData.advice,
-        timestamp: serverTimestamp()
-      });
+      if (window.__testMode) {
+        window.__lastSubmittedData = rsvpData;
+        await new Promise(resolve => setTimeout(resolve, 100));
+      } else {
+        // Save directly to Firebase Firestore
+        await addDoc(collection(db, 'rsvps'), {
+          name: rsvpData.name,
+          email: rsvpData.email,
+          attending: rsvpData.attending,
+          guests: rsvpData.guests,
+          diet: rsvpData.diet,
+          song: rsvpData.song,
+          advice: rsvpData.advice,
+          timestamp: serverTimestamp()
+        });
+      }
       
       // Show Success Screen
       form.style.display = 'none';
@@ -454,8 +459,13 @@ function initStatsGame() {
     submitBtn.textContent = 'Submitting Guess... 🎲';
 
     try {
-      // Save directly to Cloud Firestore
-      await addDoc(collection(db, 'guesses'), newGuess);
+      if (window.__testMode) {
+        window.__lastSubmittedGuess = newGuess;
+        await new Promise(resolve => setTimeout(resolve, 100));
+      } else {
+        // Save directly to Cloud Firestore
+        await addDoc(collection(db, 'guesses'), newGuess);
+      }
       
       // Hide form and show success screen
       form.style.display = 'none';
