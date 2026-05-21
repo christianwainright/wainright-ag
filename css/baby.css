@@ -962,15 +962,19 @@
     grid-template-columns: 1fr;
   }
   .custom-tile-grid {
-    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-2xs);
   }
   .tile-option {
-    padding: var(--space-xs) var(--space-2xs);
-    gap: 4px;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: var(--space-xs) var(--space-sm);
+    gap: var(--space-xs);
+    width: 100%;
   }
   .tile-label {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
   }
 }
 
@@ -1116,7 +1120,7 @@ html[data-auth="true"] body.locked #password-overlay {
 .tile-label {
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--color-text-main);
 }
 
 /* Hair colors swatches */

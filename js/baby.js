@@ -103,10 +103,17 @@ function initRSVPWizard() {
       step1Next.removeAttribute('disabled');
       
       // Customize step 2 & 3 based on attending state
+      const step2Next = document.getElementById('step2-next');
       if (attendingChoice === 'no') {
         attendeeFields.forEach(el => el.style.display = 'none');
+        if (step2Next) {
+          step2Next.innerHTML = 'Continue &rarr;';
+        }
       } else {
         attendeeFields.forEach(el => el.style.display = '');
+        if (step2Next) {
+          step2Next.innerHTML = 'Submit RSVP ✨';
+        }
       }
     });
   });
@@ -115,7 +122,11 @@ function initRSVPWizard() {
   nextBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       if (validateStep(currentStep)) {
-        goToStep(currentStep + 1);
+        if (currentStep === 2 && attendingChoice === 'yes') {
+          form.requestSubmit();
+        } else {
+          goToStep(currentStep + 1);
+        }
       }
     });
   });
@@ -131,7 +142,7 @@ function initRSVPWizard() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    if (!validateStep(3)) return;
+    if (!validateStep(currentStep)) return;
 
     // Build data object
     const rsvpData = {
@@ -140,9 +151,9 @@ function initRSVPWizard() {
       name: document.getElementById('rsvp-name').value.trim(),
       email: document.getElementById('rsvp-email').value.trim(),
       guests: attendingChoice === 'yes' ? parseInt(document.getElementById('rsvp-count').value, 10) : 0,
-      diet: attendingChoice === 'yes' ? document.getElementById('rsvp-diet').value.trim() : '',
-      song: attendingChoice === 'yes' ? document.getElementById('rsvp-song').value.trim() : '',
-      advice: document.getElementById('rsvp-advice').value.trim(),
+      diet: '',
+      song: '',
+      advice: attendingChoice === 'no' ? document.getElementById('rsvp-advice').value.trim() : '',
       date: new Date().toISOString()
     };
 
@@ -194,6 +205,11 @@ function initRSVPWizard() {
     attendingChoice = null;
     step1Next.setAttribute('disabled', 'true');
     attendeeFields.forEach(el => el.style.display = '');
+
+    const step2Next = document.getElementById('step2-next');
+    if (step2Next) {
+      step2Next.innerHTML = 'Continue &rarr;';
+    }
     
     form.style.display = 'block';
     progressBar.style.display = 'block';
@@ -233,9 +249,11 @@ function initRSVPWizard() {
     }
 
     // Update Progress Bar
-    const percent = (currentStep / 3) * 100;
+    const totalSteps = attendingChoice === 'yes' ? 2 : 3;
+    const percent = (currentStep / totalSteps) * 100;
     progressFill.style.width = `${percent}%`;
     progressBar.setAttribute('aria-valuenow', currentStep);
+    progressBar.setAttribute('aria-valuemax', totalSteps);
   }
 
   function validateStep(step) {
@@ -260,15 +278,15 @@ function initRSVPWizard() {
         nameInput.removeAttribute('aria-invalid');
       }
 
-      // Validate email
+      // Validate email (optional, validate format only if filled)
       const emailValue = emailInput.value.trim();
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailValue || !emailRegex.test(emailValue)) {
-        emailError.style.display = 'block';
+      if (emailValue && !emailRegex.test(emailValue)) {
+        if (emailError) emailError.style.display = 'block';
         emailInput.setAttribute('aria-invalid', 'true');
         isValid = false;
       } else {
-        emailError.style.display = 'none';
+        if (emailError) emailError.style.display = 'none';
         emailInput.removeAttribute('aria-invalid');
       }
     }
