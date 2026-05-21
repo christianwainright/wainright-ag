@@ -113,6 +113,7 @@ function initRSVPWizard() {
 
     // Build data object
     const rsvpData = {
+      type: 'rsvp',
       attending: attendingChoice === 'yes' ? 'yes' : 'no',
       name: document.getElementById('rsvp-name').value.trim(),
       guests: attendingChoice === 'yes' ? parseInt(document.getElementById('rsvp-count').value, 10) : 0,
@@ -283,7 +284,7 @@ function initStatsGame() {
   renderGuessesList(guesses);
 
   // Form Submission
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const nameInput = document.getElementById('guess-name');
@@ -299,6 +300,7 @@ function initStatsGame() {
     }
 
     const newGuess = {
+      type: 'guess',
       name: nameInput.value.trim(),
       date: document.getElementById('guess-date').value,
       weightLbs: parseInt(document.getElementById('guess-weight-lbs').value, 10),
@@ -307,6 +309,33 @@ function initStatsGame() {
       eyes: document.getElementById('guess-eyes').value
     };
 
+    // Show loading state
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting Guess... 🎲';
+
+    // Submit to Google Apps Script Web App if URL is configured
+    if (typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' && GOOGLE_APPS_SCRIPT_URL) {
+      try {
+        await fetch(GOOGLE_APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(newGuess)
+        });
+      } catch (err) {
+        console.error('Error sending Guess email:', err);
+      }
+    }
+
+    // Restore button state
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
+
+    // Save locally
     guesses.unshift(newGuess);
     localStorage.setItem('wainright_baby_guesses', JSON.stringify(guesses));
 
@@ -314,8 +343,9 @@ function initStatsGame() {
     updateStatsDashboard(guesses);
     renderGuessesList(guesses);
 
-    // Reset Form
+    // Reset Form & Show Success Alert
     form.reset();
+    alert('Thank you! Your guess has been recorded and Christian has been notified! 👶✨');
   });
 }
 
