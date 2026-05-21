@@ -18,5 +18,10 @@ service cloud.firestore {
       allow create: if true;
       allow read, update, delete: if false;
     }
+
+    // Config Collection: Completely private. Only Cloud Functions/Admins can read/write.
+    match /config/{document} {
+      allow read, write: if false;
+    }
   }
 }

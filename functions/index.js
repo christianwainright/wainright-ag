@@ -1,6 +1,7 @@
 const { onDocumentCreated } = require("firebase-functions/v2/firestore");
 const admin = require("firebase-admin");
 const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
 
 admin.initializeApp();
 
@@ -29,6 +30,55 @@ const getTransporter = () => {
 };
 
 /**
+ * Helper to ensure "Website RSVPs" and "Manual RSVPs" sheets exist in the spreadsheet.
+ */
+async function ensureWorksheets(sheets, spreadsheetId) {
+  const response = await sheets.spreadsheets.get({
+    spreadsheetId
+  });
+  
+  const existingSheets = (response.data.sheets || []).map(s => s.properties.title);
+  const requiredSheets = ["Website RSVPs", "Manual RSVPs"];
+  const requests = [];
+  
+  for (const sheetName of requiredSheets) {
+    if (!existingSheets.includes(sheetName)) {
+      requests.push({
+        addSheet: {
+          properties: {
+            title: sheetName
+          }
+        }
+      });
+    }
+  }
+  
+  if (requests.length > 0) {
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      resource: { requests }
+    });
+    console.log(`Created worksheets: ${requests.map(r => r.addSheet.properties.title).join(", ")}`);
+  }
+
+  // Add headers if sheets were newly created
+  for (const sheetName of requiredSheets) {
+    if (!existingSheets.includes(sheetName)) {
+      const headers = sheetName === "Website RSVPs" 
+        ? [["Timestamp", "Name", "Email", "Attending", "Guests", "Dietary Restrictions", "Song Suggestion", "Advice/Message"]]
+        : [["Date Added", "Name", "Email", "Attending", "Guests", "Dietary Restrictions", "Notes"]];
+      
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `${sheetName}!A1`,
+        valueInputOption: "RAW",
+        resource: { values: headers }
+      });
+    }
+  }
+}
+
+/**
  * Trigger: On new RSVP document created
  */
 exports.onRsvpCreated = onDocumentCreated({
@@ -48,6 +98,56 @@ exports.onRsvpCreated = onDocumentCreated({
   const song = data.song || "None";
   const advice = data.advice || "None";
   
+  // 1. Sync to Google Sheets if spreadsheet ID is configured in Firestore
+  try {
+    const configSnap = await admin.firestore().doc("config/google").get();
+    const spreadsheetId = configSnap.exists ? configSnap.data().rsvpSpreadsheetId : null;
+    
+    if (spreadsheetId) {
+      const auth = new google.auth.GoogleAuth({
+        scopes: ["https://www.googleapis.com/auth/spreadsheets"]
+      });
+      const authClient = await auth.getClient();
+      console.log("Service Account Client Email:", authClient.email || "Default ADC");
+      
+      const sheets = google.sheets({ version: "v4", auth: authClient });
+      
+      // Ensure worksheets exist
+      await ensureWorksheets(sheets, spreadsheetId);
+      
+      // Format timestamp in EST/EDT
+      const timestampStr = data.timestamp 
+        ? new Date(data.timestamp.toDate()).toLocaleString("en-US", { timeZone: "America/New_York" }) 
+        : new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+        
+      const rowValues = [
+        timestampStr,
+        name,
+        email,
+        attending === "yes" ? "Yes" : "No",
+        guests,
+        diet,
+        song,
+        advice
+      ];
+      
+      await sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: "'Website RSVPs'!A:H",
+        valueInputOption: "USER_ENTERED",
+        resource: {
+          values: [rowValues]
+        }
+      });
+      console.log(`Successfully synced RSVP for ${name} to Google Sheets.`);
+    } else {
+      console.warn("Google Sheet ID is not configured in Firestore config/google. Skipping Sheets sync.");
+    }
+  } catch (sheetError) {
+    console.error("Failed to sync RSVP to Google Sheets:", sheetError);
+  }
+
+  // 2. Send email notification
   const transporter = getTransporter();
   if (!transporter) return null;
   
@@ -61,7 +161,7 @@ exports.onRsvpCreated = onDocumentCreated({
                `Song Suggestion: ${song}\n` +
                `Message/Advice:\n${advice}\n\n` +
                `This is an automated notification from wainright.net.`;
-               
+                
   try {
     await transporter.sendMail({
       from: `"Wainright Net" <${process.env.SMTP_USER}>`,
