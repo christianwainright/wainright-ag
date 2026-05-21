@@ -87,13 +87,6 @@
 .contact-card {
   width: 100%;
   max-inline-size: 600px;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--glass-backdrop-filter);
-  border: 1px solid var(--glass-border);
-  border-radius: 1.5rem;
-  padding: var(--space-xl) var(--space-lg);
-  box-shadow: var(--shadow-premium);
   animation: fadeIn 0.8s var(--ease-premium);
 }
 
@@ -105,18 +98,26 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1.2;
+  text-align: center;
 }
 
 .contact-subtitle {
   font-size: 1rem;
   color: var(--color-text-muted);
   margin-block-end: var(--space-lg);
+  text-align: center;
 }
 
 .contact-card form {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+}
+
+#contact-submit-btn {
+  align-self: center;
+  min-inline-size: 200px;
+  margin-block-start: var(--space-sm);
 }
 
 .form-group {
