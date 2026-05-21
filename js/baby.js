@@ -1,5 +1,27 @@
-// CONFIGURATION: Add your Google Apps Script Web App URL here to enable email notifications
-const GOOGLE_APPS_SCRIPT_URL = ''; // e.g., 'https://script.google.com/macros/s/.../exec'
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  onSnapshot, 
+  query, 
+  orderBy, 
+  serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBy2b733okQ7y9Tih5_75dvJ3YbgZ3lv4k",
+  authDomain: "wainright-family-site.firebaseapp.com",
+  projectId: "wainright-family-site",
+  storageBucket: "wainright-family-site.firebasestorage.app",
+  messagingSenderId: "556395754798",
+  appId: "1:556395754798:web:f89fc483c269926defb6bf"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
@@ -123,47 +145,42 @@ function initRSVPWizard() {
       date: new Date().toISOString()
     };
 
-    // Save to LocalStorage
-    let rsvps = JSON.parse(localStorage.getItem('wainright_rsvps')) || [];
-    rsvps.push(rsvpData);
-    localStorage.setItem('wainright_rsvps', JSON.stringify(rsvps));
-
     // Show loading state
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn.textContent;
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending RSVP... ✉️';
 
-    // Submit to Google Apps Script Web App if URL is configured
-    if (typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' && GOOGLE_APPS_SCRIPT_URL) {
-      try {
-        await fetch(GOOGLE_APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors', // Avoids CORS preflight blockages on redirects
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(rsvpData)
-        });
-      } catch (err) {
-        console.error('Error sending RSVP email:', err);
+    try {
+      // Save directly to Firebase Firestore
+      await addDoc(collection(db, 'rsvps'), {
+        name: rsvpData.name,
+        attending: rsvpData.attending,
+        guests: rsvpData.guests,
+        diet: rsvpData.diet,
+        song: rsvpData.song,
+        advice: rsvpData.advice,
+        timestamp: serverTimestamp()
+      });
+      
+      // Show Success Screen
+      form.style.display = 'none';
+      progressBar.style.display = 'none';
+      successScreen.style.display = 'flex';
+
+      const successMsg = document.getElementById('success-msg');
+      if (rsvpData.attending === 'yes') {
+        successMsg.textContent = `Yay! We've registered your RSVP, ${rsvpData.name}. We can't wait to see you on August 9th!`;
+      } else {
+        successMsg.textContent = `Thank you for letting us know, ${rsvpData.name}. We'll miss you, but appreciate your warm thoughts!`;
       }
-    }
-
-    // Restore button state (in case user updates later)
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalBtnText;
-
-    // Show Success Screen
-    form.style.display = 'none';
-    progressBar.style.display = 'none';
-    successScreen.style.display = 'flex';
-
-    const successMsg = document.getElementById('success-msg');
-    if (rsvpData.attending === 'yes') {
-      successMsg.textContent = `Yay! We've registered your RSVP, ${rsvpData.name}. We can't wait to see you on August 9th!`;
-    } else {
-      successMsg.textContent = `Thank you for letting us know, ${rsvpData.name}. We'll miss you, but appreciate your warm thoughts!`;
+    } catch (err) {
+      console.error('Error submitting RSVP to Firestore:', err);
+      alert('Oops! There was an issue sending your RSVP. Please try again or email Kiki directly.');
+    } finally {
+      // Restore button state
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
     }
   });
 
@@ -272,31 +289,37 @@ function initStatsGame() {
 
   if (!form || !guessesList) return;
 
-  // Retrieve guesses or seed
-  let guesses = JSON.parse(localStorage.getItem('wainright_baby_guesses'));
-  if (!guesses) {
-    guesses = DEFAULT_GUESSES;
-    localStorage.setItem('wainright_baby_guesses', JSON.stringify(guesses));
-  }
+  // Real-time Firestore Listener
+  const q = query(collection(db, 'guesses'), orderBy('timestamp', 'desc'));
+  onSnapshot(q, (snapshot) => {
+    let guesses = [];
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      guesses.push({
+        name: data.name,
+        date: data.date,
+        weightLbs: data.weightLbs,
+        weightOz: data.weightOz,
+        hair: data.hair,
+        eyes: data.eyes
+      });
+    });
 
-  // Update Stats & Render List
-  updateStatsDashboard(guesses);
-  renderGuessesList(guesses);
+    // If Firestore has no guesses yet, seed with defaults
+    if (guesses.length === 0) {
+      guesses = DEFAULT_GUESSES;
+    }
 
-  // Fetch remote guesses from Google Sheets if URL is configured
-  if (typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' && GOOGLE_APPS_SCRIPT_URL) {
-    fetch(GOOGLE_APPS_SCRIPT_URL)
-      .then(res => res.json())
-      .then(data => {
-        if (data.result === 'success' && data.guesses && data.guesses.length > 0) {
-          guesses = data.guesses;
-          localStorage.setItem('wainright_baby_guesses', JSON.stringify(guesses));
-          updateStatsDashboard(guesses);
-          renderGuessesList(guesses);
-        }
-      })
-      .catch(err => console.error('Error loading guesses from sheets:', err));
-  }
+    // Update Stats Dashboard & Recent List in real-time
+    updateStatsDashboard(guesses);
+    renderGuessesList(guesses);
+  }, (err) => {
+    console.error('Error loading guesses from Firestore:', err);
+    // Fallback to local storage or defaults on error
+    const local = JSON.parse(localStorage.getItem('wainright_baby_guesses')) || DEFAULT_GUESSES;
+    updateStatsDashboard(local);
+    renderGuessesList(local);
+  });
 
   // Form Submission
   form.addEventListener('submit', async (e) => {
@@ -315,13 +338,13 @@ function initStatsGame() {
     }
 
     const newGuess = {
-      type: 'guess',
       name: nameInput.value.trim(),
       date: document.getElementById('guess-date').value,
       weightLbs: parseInt(document.getElementById('guess-weight-lbs').value, 10),
       weightOz: parseInt(document.getElementById('guess-weight-oz').value, 10),
       hair: document.getElementById('guess-hair').value,
-      eyes: document.getElementById('guess-eyes').value
+      eyes: document.getElementById('guess-eyes').value,
+      timestamp: serverTimestamp()
     };
 
     // Show loading state
@@ -330,37 +353,21 @@ function initStatsGame() {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting Guess... 🎲';
 
-    // Submit to Google Apps Script Web App if URL is configured
-    if (typeof GOOGLE_APPS_SCRIPT_URL !== 'undefined' && GOOGLE_APPS_SCRIPT_URL) {
-      try {
-        await fetch(GOOGLE_APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(newGuess)
-        });
-      } catch (err) {
-        console.error('Error sending Guess email:', err);
-      }
+    try {
+      // Save directly to Cloud Firestore
+      await addDoc(collection(db, 'guesses'), newGuess);
+      
+      // Reset Form & Show Success Alert
+      form.reset();
+      alert('Thank you! Your guess has been recorded and Christian has been notified! 👶✨');
+    } catch (err) {
+      console.error('Error saving guess to Firestore:', err);
+      alert('Oops! There was an issue submitting your guess. Please try again.');
+    } finally {
+      // Restore button state
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
     }
-
-    // Restore button state
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalBtnText;
-
-    // Save locally
-    guesses.unshift(newGuess);
-    localStorage.setItem('wainright_baby_guesses', JSON.stringify(guesses));
-
-    // Update Dashboard & List
-    updateStatsDashboard(guesses);
-    renderGuessesList(guesses);
-
-    // Reset Form & Show Success Alert
-    form.reset();
-    alert('Thank you! Your guess has been recorded and Christian has been notified! 👶✨');
   });
 }
 
