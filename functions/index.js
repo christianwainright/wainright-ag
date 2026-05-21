@@ -31,12 +31,16 @@ const getTransporter = () => {
 /**
  * Trigger: On new RSVP document created
  */
-exports.onRsvpCreated = onDocumentCreated("rsvps/{rsvpId}", async (event) => {
+exports.onRsvpCreated = onDocumentCreated({
+  document: "rsvps/{rsvpId}",
+  secrets: ["SMTP_USER", "OAUTH_CLIENT_ID", "OAUTH_CLIENT_SECRET", "OAUTH_REFRESH_TOKEN"]
+}, async (event) => {
   const snap = event.data;
   if (!snap) return null;
   
   const data = snap.data();
   const name = data.name || "Anonymous";
+  const email = data.email || "Not provided";
   const attending = data.attending || "no";
   const attendingLabel = attending === "yes" ? "Attending" : "Not Attending";
   const guests = data.guests || 0;
@@ -50,6 +54,7 @@ exports.onRsvpCreated = onDocumentCreated("rsvps/{rsvpId}", async (event) => {
   const subject = `Baby Shower RSVP: ${name} is ${attendingLabel}!`;
   const body = `You have received a new RSVP for A Tiny Human Gathering!\n\n` +
                `Name: ${name}\n` +
+               `Email: ${email}\n` +
                `Status: ${attendingLabel}\n` +
                `Number of Guests: ${guests}\n` +
                `Dietary Restrictions: ${diet}\n` +
@@ -74,7 +79,10 @@ exports.onRsvpCreated = onDocumentCreated("rsvps/{rsvpId}", async (event) => {
 /**
  * Trigger: On new Guess document created
  */
-exports.onGuessCreated = onDocumentCreated("guesses/{guessId}", async (event) => {
+exports.onGuessCreated = onDocumentCreated({
+  document: "guesses/{guessId}",
+  secrets: ["SMTP_USER", "OAUTH_CLIENT_ID", "OAUTH_CLIENT_SECRET", "OAUTH_REFRESH_TOKEN"]
+}, async (event) => {
   const snap = event.data;
   if (!snap) return null;
   

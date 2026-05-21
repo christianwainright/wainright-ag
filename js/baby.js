@@ -138,6 +138,7 @@ function initRSVPWizard() {
       type: 'rsvp',
       attending: attendingChoice === 'yes' ? 'yes' : 'no',
       name: document.getElementById('rsvp-name').value.trim(),
+      email: document.getElementById('rsvp-email').value.trim(),
       guests: attendingChoice === 'yes' ? parseInt(document.getElementById('rsvp-count').value, 10) : 0,
       diet: attendingChoice === 'yes' ? document.getElementById('rsvp-diet').value.trim() : '',
       song: attendingChoice === 'yes' ? document.getElementById('rsvp-song').value.trim() : '',
@@ -155,6 +156,7 @@ function initRSVPWizard() {
       // Save directly to Firebase Firestore
       await addDoc(collection(db, 'rsvps'), {
         name: rsvpData.name,
+        email: rsvpData.email,
         attending: rsvpData.attending,
         guests: rsvpData.guests,
         diet: rsvpData.diet,
@@ -222,7 +224,10 @@ function initRSVPWizard() {
     else if (step === 2) {
       const nameInput = document.getElementById('rsvp-name');
       const nameError = document.getElementById('rsvp-name-error');
+      const emailInput = document.getElementById('rsvp-email');
+      const emailError = document.getElementById('rsvp-email-error');
       
+      // Validate name
       if (!nameInput.value.trim()) {
         nameError.style.display = 'block';
         nameInput.setAttribute('aria-invalid', 'true');
@@ -230,6 +235,18 @@ function initRSVPWizard() {
       } else {
         nameError.style.display = 'none';
         nameInput.removeAttribute('aria-invalid');
+      }
+
+      // Validate email
+      const emailValue = emailInput.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailValue || !emailRegex.test(emailValue)) {
+        emailError.style.display = 'block';
+        emailInput.setAttribute('aria-invalid', 'true');
+        isValid = false;
+      } else {
+        emailError.style.display = 'none';
+        emailInput.removeAttribute('aria-invalid');
       }
     }
 
