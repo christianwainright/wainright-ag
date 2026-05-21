@@ -252,11 +252,11 @@ function initRSVPWizard() {
       
       // Validate name
       if (!nameInput.value.trim()) {
-        nameError.style.display = 'block';
+        if (nameError) nameError.style.display = 'block';
         nameInput.setAttribute('aria-invalid', 'true');
         isValid = false;
       } else {
-        nameError.style.display = 'none';
+        if (nameError) nameError.style.display = 'none';
         nameInput.removeAttribute('aria-invalid');
       }
 
@@ -411,11 +411,11 @@ function initStatsGame() {
     const nameError = document.getElementById('guess-name-error');
 
     if (!nameInput.value.trim()) {
-      nameError.style.display = 'block';
+      if (nameError) nameError.style.display = 'block';
       nameInput.setAttribute('aria-invalid', 'true');
       return;
     } else {
-      nameError.style.display = 'none';
+      if (nameError) nameError.style.display = 'none';
       nameInput.removeAttribute('aria-invalid');
     }
 

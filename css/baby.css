@@ -595,13 +595,110 @@
   min-inline-size: 110px;
 }
 
+/* Form layout & controls */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  margin-block-end: var(--space-md);
+  text-align: left;
+}
+
+.form-group label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-main);
+  margin-block-end: 2px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="date"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-text-main);
+  background-color: var(--color-bg-surface-subtle);
+  border: 1.5px solid var(--color-border);
+  border-radius: 12px;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: 
+    border-color var(--transition-speed) var(--ease-premium),
+    background-color var(--transition-speed) var(--ease-premium),
+    box-shadow var(--transition-speed) var(--ease-premium);
+}
+
+/* Select element dropdown indicator */
+.form-group select {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23707070' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-md) center;
+  background-size: 16px;
+  padding-inline-end: var(--space-xl);
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-group select {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d0d0d0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  }
+}
+
+.form-group input[type="date"] {
+  min-height: 44px;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.65;
+}
+
+/* Focus and active states */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background-color: var(--color-bg-surface);
+  box-shadow: 0 0 0 3px rgba(120, 160, 135, 0.15);
+}
+
 /* Form error states */
-.form-group input:user-invalid {
+.form-group input:user-invalid,
+.form-group input[aria-invalid="true"],
+.form-group select[aria-invalid="true"],
+.form-group textarea[aria-invalid="true"] {
   border-color: hsl(0 70% 50%);
   background-color: hsl(0 70% 98% / 0.05);
 }
-.form-group input:user-invalid + .error-msg {
+
+.form-group input:user-invalid + .error-msg,
+.form-group input[aria-invalid="true"] + .error-msg,
+.form-group select[aria-invalid="true"] + .error-msg,
+.form-group textarea[aria-invalid="true"] + .error-msg {
   display: block;
+}
+
+.error-msg {
+  display: none;
+  color: hsl(0 70% 50%);
+  font-size: 0.8rem;
+  margin-block-start: var(--space-2xs);
+  text-align: left;
 }
 
 /* Success Screen animation */
@@ -662,8 +759,38 @@
 }
 
 @media (max-width: 480px) {
+  .rsvp-card,
+  .game-form-wrapper,
+  .auth-card,
+  .diaper-raffle-card,
+  .registry-card {
+    padding: var(--space-md);
+    border-radius: 16px;
+  }
   .rsvp-attend-choices {
     grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+  .attend-card-content {
+    padding: var(--space-md) var(--space-sm);
+  }
+  .attend-emoji {
+    font-size: 1.8rem;
+  }
+  .wizard-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    gap: var(--space-xs);
+  }
+  .wizard-buttons button,
+  .wizard-buttons .btn {
+    flex: 1;
+    min-inline-size: 0;
+    padding-inline: var(--space-sm);
+  }
+  .wizard-success-screen {
+    padding-block: var(--space-lg);
   }
 }
 
@@ -833,6 +960,17 @@
 @media (max-width: 480px) {
   .stats-cards-grid {
     grid-template-columns: 1fr;
+  }
+  .custom-tile-grid {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: var(--space-2xs);
+  }
+  .tile-option {
+    padding: var(--space-xs) var(--space-2xs);
+    gap: 4px;
+  }
+  .tile-label {
+    font-size: 0.75rem;
   }
 }
 
