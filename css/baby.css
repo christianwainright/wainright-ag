@@ -106,6 +106,42 @@
   font-size: 0.95rem;
 }
 
+/* Interactive links in event card */
+.map-link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+}
+
+.map-link:hover strong {
+  text-decoration: underline;
+}
+
+.calendar-links {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-block-start: 4px;
+}
+
+.calendar-link {
+  color: var(--color-accent) !important;
+  text-decoration: none;
+  font-size: 0.85rem !important;
+  font-weight: 500;
+}
+
+.calendar-link:hover {
+  text-decoration: underline;
+}
+
+.calendar-links .divider {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+  font-size: 0.85rem;
+}
+
 /* Image styling */
 .baby-image-wrapper {
   position: relative;

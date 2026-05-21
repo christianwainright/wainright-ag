@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Wainright Family//Baby Shower//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+SUMMARY:A Tiny Human Gathering (Baby Shower)
+UID:baby-shower-wainright-2026
+SEQUENCE:0
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+DTSTART;TZID=America/New_York:20260809T140000
+DTEND;TZID=America/New_York:20260809T170000
+LOCATION:7151 Shannon Blvd, Fort Myers, FL 33908
+DESCRIPTION:Celebrating Christian & Kelly.\nFamily gathering, kids welcome, come hungry!\n\nWebsite: https://wainright.net/baby
+END:VEVENT
+END:VCALENDAR
