@@ -1,4 +1,5 @@
 const { onDocumentCreated } = require("firebase-functions/v2/firestore");
+const { onRequest } = require("firebase-functions/v2/https");
 const admin = require("firebase-admin");
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
@@ -65,8 +66,8 @@ async function ensureWorksheets(sheets, spreadsheetId) {
   for (const sheetName of requiredSheets) {
     if (!existingSheets.includes(sheetName)) {
       const headers = sheetName === "Website RSVPs" 
-        ? [["Timestamp", "Name", "Email", "Attending", "Guests", "Dietary Restrictions", "Song Suggestion", "Advice/Message"]]
-        : [["Date Added", "Name", "Email", "Attending", "Guests", "Dietary Restrictions", "Notes"]];
+        ? [["Timestamp", "Name", "Email", "Attending", "Guests", "Advice/Message"]]
+        : [["Date Added", "Name", "Email", "Attending", "Guests", "Notes"]];
       
       await sheets.spreadsheets.values.update({
         spreadsheetId,
@@ -81,10 +82,7 @@ async function ensureWorksheets(sheets, spreadsheetId) {
 /**
  * Trigger: On new RSVP document created
  */
-exports.onRsvpCreated = onDocumentCreated({
-  document: "rsvps/{rsvpId}",
-  secrets: ["SMTP_USER", "OAUTH_CLIENT_ID", "OAUTH_CLIENT_SECRET", "OAUTH_REFRESH_TOKEN"]
-}, async (event) => {
+exports.onRsvpCreatedHandler = async (event) => {
   const snap = event.data;
   if (!snap) return null;
   
@@ -94,8 +92,6 @@ exports.onRsvpCreated = onDocumentCreated({
   const attending = data.attending || "no";
   const attendingLabel = attending === "yes" ? "Attending" : "Not Attending";
   const guests = data.guests || 0;
-  const diet = data.diet || "None";
-  const song = data.song || "None";
   const advice = data.advice || "None";
   
   // 1. Sync to Google Sheets if spreadsheet ID is configured in Firestore
@@ -126,14 +122,12 @@ exports.onRsvpCreated = onDocumentCreated({
         email,
         attending === "yes" ? "Yes" : "No",
         guests,
-        diet,
-        song,
         advice
       ];
       
       await sheets.spreadsheets.values.append({
         spreadsheetId,
-        range: "'Website RSVPs'!A:H",
+        range: "'Website RSVPs'!A:F",
         valueInputOption: "USER_ENTERED",
         resource: {
           values: [rowValues]
@@ -157,8 +151,6 @@ exports.onRsvpCreated = onDocumentCreated({
                `Email: ${email}\n` +
                `Status: ${attendingLabel}\n` +
                `Number of Guests: ${guests}\n` +
-               `Dietary Restrictions: ${diet}\n` +
-               `Song Suggestion: ${song}\n` +
                `Message/Advice:\n${advice}\n\n` +
                `This is an automated notification from wainright.net.`;
                 
@@ -174,7 +166,13 @@ exports.onRsvpCreated = onDocumentCreated({
   } catch (error) {
     console.error("Failed to send RSVP email:", error);
   }
-});
+};
+
+exports.onRsvpCreated = onDocumentCreated({
+  document: "rsvps/{rsvpId}",
+  secrets: ["SMTP_USER", "OAUTH_CLIENT_ID", "OAUTH_CLIENT_SECRET", "OAUTH_REFRESH_TOKEN"]
+}, exports.onRsvpCreatedHandler);
+
 
 /**
  * Trigger: On new Guess document created
@@ -258,4 +256,3 @@ exports.onContactCreated = onDocumentCreated({
     console.error("Failed to send contact email:", error);
   }
 });
-

@@ -1,15 +1,16 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Guesses Collection: Anyone can read guesses to build stats, anyone can submit a new guess.
+    // Guesses Collection: Anyone can read guesses to build stats, but creation requires invitation passcode.
     match /guesses/{guessId} {
-      allow read, create: if true;
+      allow read: if true;
+      allow create: if request.resource.data.passcode == 'tinyhuman';
       allow update, delete: if false;
     }
     
-    // RSVPs Collection: Anyone can submit an RSVP, but RSVPs are write-only to protect guest privacy.
+    // RSVPs Collection: Anyone with the invitation passcode can submit an RSVP, write-only.
     match /rsvps/{rsvpId} {
-      allow create: if true;
+      allow create: if request.resource.data.passcode == 'tinyhuman';
       allow read, update, delete: if false;
     }
 

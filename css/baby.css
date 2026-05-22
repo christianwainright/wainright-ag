@@ -1196,3 +1196,53 @@ html[data-auth="true"] body.locked #password-overlay {
   z-index: 999999;
   pointer-events: none;
 }
+
+/* RSVP Contact Info styling */
+.rsvp-contact-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-block-start: var(--space-sm);
+}
+
+.rsvp-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-accent) !important;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: var(--space-2xs) var(--space-md);
+  background-color: var(--color-bg-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  transition: 
+    background-color var(--transition-speed) var(--ease-premium),
+    border-color var(--transition-speed) var(--ease-premium),
+    transform var(--transition-speed) var(--ease-premium);
+}
+
+.rsvp-contact-link:hover {
+  background-color: var(--color-accent-subtle);
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+.contact-icon {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 480px) {
+  .rsvp-contact-info {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .rsvp-contact-link {
+    justify-content: center;
+  }
+}
+

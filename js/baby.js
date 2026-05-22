@@ -151,8 +151,6 @@ function initRSVPWizard() {
       name: document.getElementById('rsvp-name').value.trim(),
       email: document.getElementById('rsvp-email').value.trim(),
       guests: attendingChoice === 'yes' ? parseInt(document.getElementById('rsvp-count').value, 10) : 0,
-      diet: '',
-      song: '',
       advice: attendingChoice === 'no' ? document.getElementById('rsvp-advice').value.trim() : '',
       date: new Date().toISOString()
     };
@@ -174,9 +172,8 @@ function initRSVPWizard() {
           email: rsvpData.email,
           attending: rsvpData.attending,
           guests: rsvpData.guests,
-          diet: rsvpData.diet,
-          song: rsvpData.song,
           advice: rsvpData.advice,
+          passcode: 'tinyhuman',
           timestamp: serverTimestamp()
         });
       }
@@ -449,6 +446,7 @@ function initStatsGame() {
       weightOz: parseInt(document.getElementById('guess-weight-oz').value, 10),
       hair: document.getElementById('guess-hair').value,
       eyes: document.getElementById('guess-eyes').value,
+      passcode: 'tinyhuman',
       timestamp: serverTimestamp()
     };
 

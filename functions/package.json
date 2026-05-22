@@ -14,5 +14,8 @@
   "devDependencies": {
     "firebase-functions-test": "^3.1.0"
   },
+  "scripts": {
+    "test": "node --test test.js"
+  },
   "private": true
 }
